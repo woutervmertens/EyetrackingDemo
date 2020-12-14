@@ -44,7 +44,7 @@ namespace Tobii.XR.Examples
             {
                 _renderer.material.SetColor("_BaseColor", Color.Lerp(_renderer.material.GetColor("_BaseColor"), _targetColor, Time.deltaTime * (1 / AnimationTime)));
             }
-            else // old standard rendering pipline
+            else // old standard rendering pipeline
             {
                 _renderer.material.color = Color.Lerp(_renderer.material.color, _targetColor, Time.deltaTime * (1 / AnimationTime));
             }
