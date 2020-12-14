@@ -39,13 +39,14 @@ public class GameManager : MonoBehaviour
         }
         hp = TobiiAPI.GetHeadPose();
         gp = TobiiAPI.GetGazePoint();
+        _screenController.AddOrbit(new Vector2(0,0),0.003f,Color.red, 120f,1 );
     }
 
     // Update is called once per frame
     void Update()
     {
         FU_instance.Update();
-        StaticScreen.SetActive(!WatchMode && !StaticAlwaysOn && hp.Rotation.eulerAngles.x > 50);
+        //StaticScreen.SetActive(!WatchMode && !StaticAlwaysOn && hp.Rotation.eulerAngles.x > 50);
     }
     
     void OnFixedUpdate(float dt)
@@ -61,12 +62,13 @@ public class GameManager : MonoBehaviour
         foreach (OrbitScript o in _orbits)
         {
             //Get the data queue or create a new one
-            Queue<Vector2> q = _windowMap[o];
-            if (q == null)
+            Queue<Vector2> q;
+            if (!_windowMap.ContainsKey(o))
             {
                 q = new Queue<Vector2>();
                 _windowMap.Add(o,q);
             }
+            q = _windowMap[o];
             //Add the new data (normalized)
             q.Enqueue(o.GetNormalizedPosition());
             //Limit the amount of datapoints

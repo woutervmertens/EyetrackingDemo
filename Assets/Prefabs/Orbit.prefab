@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16870c17332debc4da4436e863e92c3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _orbitTransform: {fileID: 6698693764019511041}
   orbitSpeed: 20
   rotationDirection: 1
 --- !u!1 &6698693764019511070

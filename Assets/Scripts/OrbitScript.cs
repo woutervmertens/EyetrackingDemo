@@ -25,11 +25,12 @@ public class OrbitScript : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        _orbitTransform.RotateAround(this.transform.position,Vector3.up,rotationDirection * orbitSpeed * Time.deltaTime);
+        _orbitTransform.RotateAround(this.transform.position,-transform.forward,rotationDirection * orbitSpeed * Time.deltaTime);
     }
 
     public void Initialize(Vector2 startPos, Color color, float speed, bool clockwise, float diameter)
     {
+        Start();
         orbitSpeed = speed;
         _orbitTransform.localPosition = new Vector3(startPos.x,startPos.y);
         _diameter = diameter;
@@ -39,7 +40,7 @@ public class OrbitScript : MonoBehaviour
 
     public void Offset(float angle)
     {
-        _orbitTransform.RotateAround(this.transform.position,Vector3.up,rotationDirection * angle);
+        _orbitTransform.RotateAround(this.transform.position, -transform.forward, rotationDirection * angle);
     }
 
     public Vector2 GetNormalizedPosition()
