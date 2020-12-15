@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
+using JetBrains.Annotations;
 using UnityEngine;
 using Tobii.Gaming;
 
@@ -17,8 +19,7 @@ public class GameManager : MonoBehaviour
     private HeadPose hp;
     private GazePoint gp;
     private Queue<Vector2> eyegazeData = new Queue<Vector2>();
-    
-    private Dictionary<OrbitScript,Queue<Vector2>> _windowMap = new Dictionary<OrbitScript,Queue<Vector2>>();
+    private int TPcount, FPcount = 0;
 
     void Awake()
     {
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour
         }
         hp = TobiiAPI.GetHeadPose();
         gp = TobiiAPI.GetGazePoint();
+        //Test
         _screenController.AddOrbit(new Vector2(0,0),0.003f,Color.red, 120f,1 );
     }
 
@@ -51,30 +53,16 @@ public class GameManager : MonoBehaviour
     
     void OnFixedUpdate(float dt)
     {
-        GetOrbitsData();
         GetEyeGazeData();
-        //Compare
+        CallOrbitsCompare();
     }
 
-    private void GetOrbitsData()
+    private void CallOrbitsCompare()
     {
         ArrayList _orbits = _screenController.GetOrbits();
         foreach (OrbitScript o in _orbits)
         {
-            //Get the data queue or create a new one
-            Queue<Vector2> q;
-            if (!_windowMap.ContainsKey(o))
-            {
-                q = new Queue<Vector2>();
-                _windowMap.Add(o,q);
-            }
-            q = _windowMap[o];
-            //Add the new data (normalized)
-            q.Enqueue(o.GetNormalizedPosition());
-            //Limit the amount of datapoints
-            if (q.Count > WindowSize) q.Dequeue();
-            //Set the datapoints for this orbit
-            _windowMap[o] = q;
+            HandleCompareResponse(o.Compare(eyegazeData.ToArray()));
         }
     }
 
@@ -84,5 +72,18 @@ public class GameManager : MonoBehaviour
         eyegazeData.Enqueue(gp.Viewport.normalized);
         //Limit the amount of datapoints
         if (eyegazeData.Count > WindowSize) eyegazeData.Dequeue();
+    }
+
+    private void HandleCompareResponse(CompareResponse res)
+    {
+        switch (res)
+        {
+            case CompareResponse.TP:
+                TPcount++;
+                break;
+            case CompareResponse.FP:
+                FPcount++;
+                break;
+        }
     }
 }
