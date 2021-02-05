@@ -27,12 +27,16 @@ public class OrbitScript : MonoBehaviour
 
     private Boolean _isTarget = false;
 
+    private int _windowsize = 30;
+    private int _startUp = 0;
+
     private double[] eyeX, eyeY, orbX, orbY;
     // Start is called before the first frame update
     void Start()
     {
         _orbitTransform = this.gameObject.transform.GetChild(0);
         _orbitImage = _orbitTransform.GetComponent<Image>();
+        
     }
 
     // Update is called once per frame
@@ -80,17 +84,22 @@ public class OrbitScript : MonoBehaviour
     public CompareResponse Compare(Vector2[] eyeReadings, float threshold = 0.8f)
     {
         CompareResponse res = CompareResponse.N;
+        if (_startUp++ < _windowsize)
+        {
+            _readings.Enqueue(GetNormalizedPosition());
+            return res;
+        }
         //Remove oldest reading. Get normalised position and add it to the queue
         _readings.Dequeue();
         _readings.Enqueue(GetNormalizedPosition());
         
         //Split X and Y arrays
         Vector2[] tempR = _readings.ToArray();
-        eyeX = new double[30];
-        eyeY = new double[30];
-        orbX = new double[30];
-        orbY = new double[30];
-        for (int i = 0; i < 30; i++)
+        eyeX = new double[_windowsize];
+        eyeY = new double[_windowsize];
+        orbX = new double[_windowsize];
+        orbY = new double[_windowsize];
+        for (int i = 0; i < _windowsize; i++)
         {
             eyeX[i] = eyeReadings[i].x;
             eyeY[i] = eyeReadings[i].y;

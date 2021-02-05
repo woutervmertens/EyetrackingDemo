@@ -6,7 +6,12 @@ using UnityEngine;
 public class ScreenController : MonoBehaviour
 {
     public GameObject orbitPrefab;
+    public GameObject testScreen;
     public GameObject clock;
+    public GameObject atp;
+    public GameObject ata;
+    public GameObject musicPlayer;
+    public GameObject callMenu;
     public Transform canvas;
     
     private ArrayList _orbits = new ArrayList();
