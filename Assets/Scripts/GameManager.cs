@@ -47,8 +47,14 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        StaticScreen.SetActive(!WatchMode && !StaticAlwaysOn && hp.Rotation.eulerAngles.x > 50);
+        hp = TobiiAPI.GetHeadPose();
+
+        Debug.Log("hp: " + ((hp.IsRecent()) ? hp.Rotation.eulerAngles.x.ToString() : "No Headposition detected"));
+
+        gp = TobiiAPI.GetGazePoint();
+        Debug.Log("gp: " + ((gp.IsRecent()) ? gp.Viewport.normalized.ToString() : "No GazePoint detected"));
         FU_instance.Update();
-        //StaticScreen.SetActive(!WatchMode && !StaticAlwaysOn && hp.Rotation.eulerAngles.x > 50);
     }
     
     void OnFixedUpdate(float dt)
