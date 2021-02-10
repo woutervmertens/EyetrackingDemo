@@ -20,13 +20,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e49daea-9adf-4f87-9a23-88dd20570e45" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.EyetrackingDemo/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EyetrackingDemo/.idea/indexLayout.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.EyetrackingDemo/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EyetrackingDemo/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.EyetrackingDemo/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EyetrackingDemo/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ClockScript.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ClockScript.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/OutputEyetrackingData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/OutputEyetrackingData.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/TobiiMgr.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/TobiiMgr.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,9 +32,9 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/Assets/Scripts/TobiiMgr.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/OutputEyetrackingData.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/TobiiMgr.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1kQiocrZ2wM8kQlDFCYiVxAnFwn" />
@@ -91,7 +84,7 @@
       <workItem from="1608050404707" duration="3432000" />
       <workItem from="1608114549067" duration="1032000" />
       <workItem from="1608201646005" duration="2417000" />
-      <workItem from="1612951974230" duration="750000" />
+      <workItem from="1612951974230" duration="1050000" />
     </task>
     <servers />
   </component>

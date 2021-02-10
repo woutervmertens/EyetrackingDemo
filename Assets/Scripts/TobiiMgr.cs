@@ -19,6 +19,10 @@ public class TobiiMgr : MonoBehaviour
         hmd = Camera.main;
     }
 
+    /// <summary>
+    /// Takes the gazeRay from the eyetrackingdata, if it is valid returns a normalised vector which approximates the point on the screen the eye is looking at.
+    /// </summary>
+    /// <returns>A vector2 between (-1,-1) and (1,1)</returns>
     public Vector2 GetViewData()
     {
         var eyeTrackingData = TobiiXR.GetEyeTrackingData(TobiiXR_TrackingSpace.Local);
@@ -26,7 +30,7 @@ public class TobiiMgr : MonoBehaviour
         if (gazeRay.IsValid)
         {
             Vector3 screenPosition = gazeRay.Origin + gazeRay.Direction.normalized * _defaultDistance;
-            return new Vector2(screenPosition.x, screenPosition.y);
+            return new Vector2(screenPosition.x, screenPosition.y);//TODO: normalize?
         }
         return new Vector2(0, 0);
     }
