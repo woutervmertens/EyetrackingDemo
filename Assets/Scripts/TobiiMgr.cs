@@ -30,17 +30,26 @@ public class TobiiMgr : MonoBehaviour
         }
         return new Vector2(0, 0);
     }
+
+    private Transform getHMDTransform()
+    {
+        if (!hmd) Start();
+        return hmd.transform;
+    }
    
 
     public Vector3 GetHMDPosition()
     {
-        if (!hmd) Start();
-        return hmd.transform.position;
+        return getHMDTransform().position;
+    }
+
+    public Quaternion GetHMDRotation()
+    {
+        return getHMDTransform().rotation;
     }
 
     public Vector3 GetHMDDirection()
     {
-        if (!hmd) Start();
-        return hmd.transform.forward;
+        return getHMDTransform().forward;
     }
 }

@@ -7,20 +7,12 @@ using Tobii.Gaming;
 public class OutputEyetrackingData : MonoBehaviour
 {
     private CustomFixedUpdate FU_instance;
-    private GazePoint gp;
-    private HeadPose hp;
 
     void Awake()
     {
         FU_instance = new CustomFixedUpdate(OnFixedUpdate,30);
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        gp = TobiiAPI.GetGazePoint();
-        hp = TobiiAPI.GetHeadPose();
-    }
-    
+
     // Update is called once per frame
     void Update()
     {
@@ -29,8 +21,7 @@ public class OutputEyetrackingData : MonoBehaviour
 
     void OnFixedUpdate(float dt)
     {
-        Console.Out.WriteLine("Viewport: " + gp.Viewport.ToString());
-        Console.Out.WriteLine("Screen: " + gp.Screen.ToString());
-        Console.Out.WriteLine("Headpose: " + hp.Rotation.eulerAngles.ToString());
+        Console.Out.WriteLine("Viewdata: " + TobiiMgr.Instance.GetViewData().ToString());
+        Console.Out.WriteLine("Headpose: " + TobiiMgr.Instance.GetHMDRotation().eulerAngles.ToString());
     }
 }

@@ -20,9 +20,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e49daea-9adf-4f87-9a23-88dd20570e45" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Watch.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Watch.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ScreenController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/ScreenController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.EyetrackingDemo/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EyetrackingDemo/.idea/indexLayout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.EyetrackingDemo/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EyetrackingDemo/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.EyetrackingDemo/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EyetrackingDemo/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ClockScript.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ClockScript.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/OutputEyetrackingData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/OutputEyetrackingData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TobiiMgr.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/TobiiMgr.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,17 +38,11 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/Assets/Scripts/WatchScreenController.cs" />
-        <option value="$PROJECT_DIR$/Assets/TobiiXR/Examples/Utilities/HighlightAtGaze.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/CompareResponse.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/OrbitScript.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/ScreenController.cs" />
-        <option value="$PROJECT_DIR$/Assets/ClockScript.cs" />
-      </list>
-    </option>
+    <changedPaths>
+      <option value="$PROJECT_DIR$/Assets/Scripts/TobiiMgr.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/OutputEyetrackingData.cs" />
+    </changedPaths>
   </component>
   <component name="ProjectId" id="1kQiocrZ2wM8kQlDFCYiVxAnFwn" />
   <component name="ProjectViewState">
@@ -63,7 +62,7 @@
       <option name="listenPortForConnections" value="false" />
       <option name="pid" />
       <option name="selectedOptions">
-        <set />
+        <list />
       </option>
       <method v="2" />
     </configuration>
@@ -72,7 +71,7 @@
       <option name="listenPortForConnections" value="false" />
       <option name="pid" />
       <option name="selectedOptions">
-        <set />
+        <list />
       </option>
       <method v="2" />
     </configuration>
@@ -92,6 +91,7 @@
       <workItem from="1608050404707" duration="3432000" />
       <workItem from="1608114549067" duration="1032000" />
       <workItem from="1608201646005" duration="2417000" />
+      <workItem from="1612951974230" duration="750000" />
     </task>
     <servers />
   </component>

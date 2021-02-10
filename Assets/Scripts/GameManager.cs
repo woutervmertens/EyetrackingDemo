@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using DefaultNamespace;
 using JetBrains.Annotations;
 using UnityEngine;
-using Tobii.Gaming;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,8 +15,7 @@ public class GameManager : MonoBehaviour
     public GameObject StaticScreen;
     private ScreenController _screenController;
     private CustomFixedUpdate FU_instance;
-    private HeadPose hp;
-    private GazePoint gp;
+
     private Queue<Vector2> eyegazeData = new Queue<Vector2>();
     private int TPcount, FPcount = 0;
 
@@ -38,8 +36,6 @@ public class GameManager : MonoBehaviour
         {
             _screenController = StaticScreen.transform.GetComponentInChildren<ScreenController>();
         }
-        hp = TobiiAPI.GetHeadPose();
-        gp = TobiiAPI.GetGazePoint();
         //Test
         _screenController.AddOrbit(new Vector2(0,0),0.003f,Color.red, 120f,1 );
     }
@@ -47,13 +43,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        StaticScreen.SetActive(!WatchMode && !StaticAlwaysOn && hp.Rotation.eulerAngles.x > 50);
-        hp = TobiiAPI.GetHeadPose();
-
-        Debug.Log("hp: " + ((hp.IsRecent()) ? hp.Rotation.eulerAngles.x.ToString() : "No Headposition detected"));
-
-        gp = TobiiAPI.GetGazePoint();
-        Debug.Log("gp: " + ((gp.IsRecent()) ? gp.Viewport.normalized.ToString() : "No GazePoint detected"));
+        StaticScreen.SetActive(!WatchMode && !StaticAlwaysOn && TobiiMgr.Instance.GetHMDRotation().eulerAngles.y < -0.4);
         FU_instance.Update();
     }
     
@@ -75,7 +65,7 @@ public class GameManager : MonoBehaviour
     private void GetEyeGazeData()
     {
         //Add the new data (normalized)
-        eyegazeData.Enqueue(gp.Viewport.normalized);
+        eyegazeData.Enqueue(TobiiMgr.Instance.GetViewData().normalized);
         //Limit the amount of datapoints
         if (eyegazeData.Count > WindowSize) eyegazeData.Dequeue();
     }
