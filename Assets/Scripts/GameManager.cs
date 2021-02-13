@@ -15,8 +15,9 @@ public class GameManager : MonoBehaviour
     public GameObject StaticScreen;
     private ScreenController _screenController;
     private CustomFixedUpdate FU_instance;
-
-    private Queue<Vector2> eyegazeData = new Queue<Vector2>();
+    
+    private Queue<Vector2> eyegazeData = new Queue<Vector2>(); // holds the normalised trajectories of the eye
+    private Vector2 _prevEyePos = Vector2.zero;
     private int TPcount, FPcount = 0;
 
     void Awake()
@@ -65,7 +66,7 @@ public class GameManager : MonoBehaviour
     private void GetEyeGazeData()
     {
         //Add the new data (normalized)
-        eyegazeData.Enqueue(TobiiMgr.Instance.GetViewData().normalized);
+        eyegazeData.Enqueue(Tools.GetNormalizedTrajectory(TobiiMgr.Instance.GetViewData(), _prevEyePos));
         //Limit the amount of datapoints
         if (eyegazeData.Count > WindowSize) eyegazeData.Dequeue();
     }

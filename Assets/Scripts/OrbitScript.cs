@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.Mime;
 using DefaultNamespace;
+using MathNet.Numerics.LinearAlgebra.Double;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -24,6 +25,7 @@ public class OrbitScript : MonoBehaviour
     private float _diameter = 0.1f;
     
     private Queue<Vector2> _readings = new Queue<Vector2>();
+    private Vector2 _prevPosition = Vector2.zero;
 
     private Boolean _isTarget = false;
 
@@ -60,9 +62,10 @@ public class OrbitScript : MonoBehaviour
         _orbitTransform.RotateAround(this.transform.position, -transform.forward, rotationDirection * angle);
     }
 
-    public Vector2 GetNormalizedPosition()
+    private Vector2 GetNormalizedTrajectory()
     {
-        return new Vector2(_orbitTransform.localPosition.x/_diameter,_orbitTransform.localPosition.y/_diameter);;
+        Vector2 pos = new Vector2(_orbitTransform.localPosition.x, _orbitTransform.localPosition.y);
+        return Tools.GetNormalizedTrajectory(pos, _prevPosition);;
     }
 
     public void SetAsTarget()
@@ -86,12 +89,12 @@ public class OrbitScript : MonoBehaviour
         CompareResponse res = CompareResponse.N;
         if (_startUp++ < _windowsize)
         {
-            _readings.Enqueue(GetNormalizedPosition());
+            _readings.Enqueue(GetNormalizedTrajectory());
             return res;
         }
         //Remove oldest reading. Get normalised position and add it to the queue
         _readings.Dequeue();
-        _readings.Enqueue(GetNormalizedPosition());
+        _readings.Enqueue(GetNormalizedTrajectory());
         
         //Split X and Y arrays
         Vector2[] tempR = _readings.ToArray();

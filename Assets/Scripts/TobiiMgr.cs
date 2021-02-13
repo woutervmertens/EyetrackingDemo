@@ -30,7 +30,7 @@ public class TobiiMgr : MonoBehaviour
         if (gazeRay.IsValid)
         {
             Vector3 screenPosition = gazeRay.Origin + gazeRay.Direction.normalized * _defaultDistance;
-            return new Vector2(screenPosition.x, screenPosition.y);//TODO: normalize?
+            return new Vector2(screenPosition.x, screenPosition.y);
         }
         return new Vector2(0, 0);
     }

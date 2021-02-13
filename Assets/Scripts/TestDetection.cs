@@ -11,5 +11,13 @@ public class TestDetection : MonoBehaviour
     {
         i++;
         text.text = i.ToString();
+        Reset();
+    }
+
+    void Reset()
+    {
+        //Remove orbits
+        
+        //Create new orbits
     }
 }
