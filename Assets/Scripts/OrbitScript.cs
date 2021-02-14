@@ -47,7 +47,7 @@ public class OrbitScript : MonoBehaviour
         _orbitTransform.RotateAround(this.transform.position,-transform.forward,rotationDirection * orbitSpeed * Time.deltaTime);
     }
 
-    public void Initialize(Vector2 startPos, Color color, float speed, bool clockwise, float diameter)
+    public void Initialize(Vector2 startPos, Color color, float speed, bool clockwise, float diameter, bool isTarget)
     {
         Start();
         orbitSpeed = speed;
@@ -55,6 +55,7 @@ public class OrbitScript : MonoBehaviour
         _diameter = diameter;
         _orbitImage.color = color;
         rotationDirection = clockwise ? 1 : -1;
+        _isTarget = isTarget;
     }
 
     public void Offset(float angle)
@@ -66,16 +67,6 @@ public class OrbitScript : MonoBehaviour
     {
         Vector2 pos = new Vector2(_orbitTransform.localPosition.x, _orbitTransform.localPosition.y);
         return Tools.GetNormalizedTrajectory(pos, _prevPosition);;
-    }
-
-    public void SetAsTarget()
-    {
-        SetAsTarget(Color.red);
-    }
-    public void SetAsTarget(Color c)
-    {
-        _isTarget = true;
-        _orbitImage.color = c;
     }
 
     /// <summary>

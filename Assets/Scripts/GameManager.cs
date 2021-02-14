@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
             _screenController = StaticScreen.transform.GetComponentInChildren<ScreenController>();
         }
         //Test
-        _screenController.AddOrbit(new Vector2(0,0),0.003f,Color.red, 120f,1 );
+        //_screenController.AddOrbit(new Vector2(0,0),0.003f,Color.red, 120f,1 );
     }
 
     // Update is called once per frame

@@ -1,12 +1,14 @@
-﻿using System.CodeDom;
+﻿using System;
+using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEngine;
 
 public class ScreenController : MonoBehaviour
 {
     public GameObject orbitPrefab;
-    public GameObject testScreen;
+    public MenuScreen testScreen;
     public GameObject clock;
     public GameObject atp;
     public GameObject ata;
@@ -16,14 +18,25 @@ public class ScreenController : MonoBehaviour
     
     private ArrayList _orbits = new ArrayList();
 
-    public void AddOrbit(Vector2 centerPoint, float diameter, Color color, float speed, int n, bool clockwise = true)
+    private void Start()
+    {
+        testScreen.SetScreenController(this);
+        testScreen.Reset();
+    }
+
+    public void AddOrbit(Vector2 centerPoint, float diameter, Color color, float speed, int n, bool clockwise = true, bool isTarget = false)
     {
         GameObject o = Instantiate(orbitPrefab, canvas);
         OrbitScript os = o.GetComponent<OrbitScript>();
         Vector2 offsetPoint = new Vector2(centerPoint.x,centerPoint.y - diameter);
-        os.Initialize(offsetPoint,color,speed, clockwise,diameter);
+        os.Initialize(offsetPoint,color,speed, clockwise,diameter, isTarget);
         os.Offset(720 / n);
         _orbits.Add(os);
+    }
+
+    public void ClearOrbits()
+    {
+        _orbits.Clear();
     }
 
     /// <summary>
