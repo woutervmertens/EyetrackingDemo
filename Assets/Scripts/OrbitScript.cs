@@ -78,6 +78,7 @@ public class OrbitScript : MonoBehaviour
     public CompareResponse Compare(Vector2[] eyeReadings, float threshold = 0.8f)
     {
         CompareResponse res = CompareResponse.N;
+        //Don't start until window is filled
         if (_startUp++ < _windowsize)
         {
             _readings.Enqueue(GetNormalizedTrajectory());
