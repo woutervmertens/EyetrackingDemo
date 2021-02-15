@@ -15,13 +15,13 @@ public class TestDetection : MenuScreen
         Reset();
     }
     
-    public void Reset()
+    public override void Reset()
     {
         //Remove orbits
         _screenController.ClearOrbits();
         
         //Create new orbits
-        _screenController.AddOrbit(new Vector2(-0.5f,0),0.2f,Color.red, 120f,1 , true);
-        _screenController.AddOrbit(new Vector2(0.5f,0),0.2f,Color.black, 120f,2 );
+        _screenController.AddOrbit(new Vector2(0,0),0.1f,Color.red, 120f,1 , true);
+        _screenController.AddOrbit(new Vector2(0,0),0.1f,Color.black, 120f,2 );
     }
 }

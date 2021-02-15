@@ -20,6 +20,7 @@ public class ScreenController : MonoBehaviour
 
     private void Start()
     {
+        canvas = transform.GetComponentInChildren<Canvas>().transform;
         testScreen.SetScreenController(this);
         testScreen.Reset();
     }
@@ -30,7 +31,7 @@ public class ScreenController : MonoBehaviour
         OrbitScript os = o.GetComponent<OrbitScript>();
         Vector2 offsetPoint = new Vector2(centerPoint.x,centerPoint.y - diameter);
         os.Initialize(offsetPoint,color,speed, clockwise,diameter, isTarget);
-        os.Offset(720 / n);
+        os.Offset(360 / n);
         _orbits.Add(os);
     }
 

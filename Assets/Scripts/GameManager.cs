@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        StaticScreen.SetActive(!WatchMode && !StaticAlwaysOn && TobiiMgr.Instance.GetHMDRotation().eulerAngles.y < -0.4);
+        StaticScreen.SetActive(!WatchMode || (StaticAlwaysOn || TobiiMgr.Instance.GetHMDRotation().eulerAngles.y < -0.4));
         FU_instance.Update();
     }
     
