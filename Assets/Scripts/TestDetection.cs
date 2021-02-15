@@ -21,7 +21,7 @@ public class TestDetection : MenuScreen
         _screenController.ClearOrbits();
         
         //Create new orbits
-        _screenController.AddOrbit(new Vector2(0,0),0.1f,Color.red, 120f,1 , true);
-        _screenController.AddOrbit(new Vector2(0,0),0.1f,Color.black, 120f,2 );
+        _screenController.AddOrbit(new Vector2(0,0),0.3f,Color.red, 120f,1 , true);
+        _screenController.AddOrbit(new Vector2(0,0),0.3f,Color.black, 120f,2 );
     }
 }
