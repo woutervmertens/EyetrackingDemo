@@ -22,6 +22,6 @@ public class OutputEyetrackingData : MonoBehaviour
     void OnFixedUpdate(float dt)
     {
         Console.Out.WriteLine("Viewdata: " + TobiiMgr.Instance.GetViewData().ToString());
-        Console.Out.WriteLine("Headpose: " + TobiiMgr.Instance.GetHMDRotation().eulerAngles.ToString());
+        Console.Out.WriteLine("Headpose: " + TobiiMgr.Instance.GetHMDRotation().ToString());
     }
 }

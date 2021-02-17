@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class ScreenController : MonoBehaviour
 {
@@ -32,11 +33,16 @@ public class ScreenController : MonoBehaviour
         Vector2 offsetPoint = new Vector2(centerPoint.x,centerPoint.y - diameter);
         os.Initialize(offsetPoint,color,speed, clockwise,diameter, isTarget, n);
         os.Offset(360 / n);
+        os.OnSelected.AddListener(() => { testScreen.OnTriggered(n);});
         _orbits.Add(os);
     }
 
     public void ClearOrbits()
     {
+        for (int i = _orbits.Count - 1; i >= 0; i--)
+        {
+            Destroy(((OrbitScript) _orbits[i]).gameObject);
+        }
         _orbits.Clear();
     }
 

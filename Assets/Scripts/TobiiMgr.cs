@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Tobii.XR;
 using System;
+using MathNet.Numerics.LinearAlgebra.Double;
 
 public class TobiiMgr : MonoBehaviour
 {
@@ -47,9 +48,9 @@ public class TobiiMgr : MonoBehaviour
         return getHMDTransform().position;
     }
 
-    public Quaternion GetHMDRotation()
+    public Vector3 GetHMDRotation()
     {
-        return getHMDTransform().rotation;
+        return getHMDTransform().eulerAngles;
     }
 
     public Vector3 GetHMDDirection()

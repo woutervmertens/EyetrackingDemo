@@ -97,7 +97,7 @@ namespace DefaultNamespace
 
         public void StartNewTest(String name)
         {
-            outputList.Add(second, new OutputData(second, name));
+            if(!outputList.ContainsKey(second))outputList.Add(second, new OutputData(second, name));
         }
 
         public void AddOrbitTrajectory(int orbitId, Vector2 trajectory, double minCorrelation)

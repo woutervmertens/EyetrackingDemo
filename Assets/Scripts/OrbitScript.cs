@@ -65,6 +65,11 @@ public class OrbitScript : MonoBehaviour
         _orbitTransform.RotateAround(this.transform.position, -transform.forward, rotationDirection * angle);
     }
 
+    public void AddListener(UnityAction call)
+    {
+        OnSelected.AddListener(call);
+    }
+
     private Vector2 GetNormalizedTrajectory()
     {
         Vector2 pos = new Vector2(_orbitTransform.localPosition.x, _orbitTransform.localPosition.y);
@@ -105,8 +110,14 @@ public class OrbitScript : MonoBehaviour
             orbY[i] = tempR[i].y;
         }
         //Calculate the correlations, take the minimum, see if it passes the threshold
+        
         double correlationX = Math.Abs(Correlation.Pearson(eyeX, orbX));
         double correlationY = Math.Abs(Correlation.Pearson(eyeY, orbY));
+        
+        {
+            correlationX = Math.Abs(Correlation.Pearson(orbX, orbX));
+            correlationY = Math.Abs(Correlation.Pearson(orbY, orbY));
+        }
         double correlation = Math.Min(correlationX, correlationY);
         if (correlation > threshold)
         {

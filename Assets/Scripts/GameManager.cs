@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
         {
             _screenController = StaticScreen.transform.GetComponentInChildren<ScreenController>();
         }
+
+        GameStateMgr.Instance.State = GameState.Measuring;
         //Test
         //_screenController.AddOrbit(new Vector2(0,0),0.003f,Color.red, 120f,1 );
     }
@@ -45,12 +47,15 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        StaticScreen.SetActive(!WatchMode || (StaticAlwaysOn || TobiiMgr.Instance.GetHMDRotation().eulerAngles.y < -0.4));
+        
+        float x = TobiiMgr.Instance.GetHMDRotation().x;
+        StaticScreen.SetActive(!WatchMode && (StaticAlwaysOn || (x > 15 && x < 60)));
         FU_instance.Update();
     }
     
     void OnFixedUpdate(float dt)
     {
+        if (GameStateMgr.Instance.State != GameState.Measuring) return;
         GetEyeGazeData();
         CallOrbitsCompare();
     }
@@ -62,15 +67,18 @@ public class GameManager : MonoBehaviour
 
     private void CallOrbitsCompare()
     {
+        if (GameStateMgr.Instance.State != GameState.Measuring) return;
         ArrayList _orbits = _screenController.GetOrbits();
-        foreach (OrbitScript o in _orbits)
+        for (var i = 0; i < _orbits.Count; i++)
         {
+            var o = (OrbitScript) _orbits[i];
             HandleCompareResponse(o.Compare(eyegazeData.ToArray()));
         }
     }
 
     private void GetEyeGazeData()
     {
+        if (GameStateMgr.Instance.State != GameState.Measuring) return;
         //Add the new data (normalized)
         Vector2 v = Tools.GetNormalizedTrajectory(TobiiMgr.Instance.GetViewData(), _prevEyePos);
         eyegazeData.Enqueue(v);

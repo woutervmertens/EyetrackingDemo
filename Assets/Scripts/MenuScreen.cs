@@ -7,6 +7,7 @@ namespace DefaultNamespace
     {
         protected ScreenController _screenController;
         public virtual void Reset(){}
+        public virtual void OnTriggered(int n){}
 
         public void SetScreenController(ScreenController s)
         {
