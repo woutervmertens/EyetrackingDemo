@@ -110,14 +110,9 @@ public class OrbitScript : MonoBehaviour
             orbY[i] = tempR[i].y;
         }
         //Calculate the correlations, take the minimum, see if it passes the threshold
-        
         double correlationX = Math.Abs(Correlation.Pearson(eyeX, orbX));
         double correlationY = Math.Abs(Correlation.Pearson(eyeY, orbY));
         
-        {
-            correlationX = Math.Abs(Correlation.Pearson(orbX, orbX));
-            correlationY = Math.Abs(Correlation.Pearson(orbY, orbY));
-        }
         double correlation = Math.Min(correlationX, correlationY);
         if (correlation > threshold)
         {
