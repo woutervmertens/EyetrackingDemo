@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 {
     public Boolean WatchMode = true;
     public Boolean StaticAlwaysOn = true;
+    public Boolean SaveData = false;
     public int WindowSize = 30;
 
     public GameObject Watch;
@@ -54,6 +55,11 @@ public class GameManager : MonoBehaviour
         CallOrbitsCompare();
     }
 
+    private void OnDestroy()
+    {
+        if(SaveData)OutputMgr.Instance.Save();
+    }
+
     private void CallOrbitsCompare()
     {
         ArrayList _orbits = _screenController.GetOrbits();
@@ -66,9 +72,12 @@ public class GameManager : MonoBehaviour
     private void GetEyeGazeData()
     {
         //Add the new data (normalized)
-        eyegazeData.Enqueue(Tools.GetNormalizedTrajectory(TobiiMgr.Instance.GetViewData(), _prevEyePos));
+        Vector2 v = Tools.GetNormalizedTrajectory(TobiiMgr.Instance.GetViewData(), _prevEyePos);
+        eyegazeData.Enqueue(v);
         //Limit the amount of datapoints
         if (eyegazeData.Count > WindowSize) eyegazeData.Dequeue();
+        //Output
+        OutputMgr.Instance.AddEyeTrajectory(v);
     }
 
     private void HandleCompareResponse(CompareResponse res)

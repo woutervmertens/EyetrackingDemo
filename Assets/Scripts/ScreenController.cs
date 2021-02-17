@@ -30,7 +30,7 @@ public class ScreenController : MonoBehaviour
         GameObject o = Instantiate(orbitPrefab, canvas);
         OrbitScript os = o.GetComponent<OrbitScript>();
         Vector2 offsetPoint = new Vector2(centerPoint.x,centerPoint.y - diameter);
-        os.Initialize(offsetPoint,color,speed, clockwise,diameter, isTarget);
+        os.Initialize(offsetPoint,color,speed, clockwise,diameter, isTarget, n);
         os.Offset(360 / n);
         _orbits.Add(os);
     }

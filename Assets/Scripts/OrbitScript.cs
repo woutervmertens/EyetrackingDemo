@@ -31,6 +31,7 @@ public class OrbitScript : MonoBehaviour
 
     private int _windowsize = 30;
     private int _startUp = 0;
+    private int _orbitId = -1;
 
     private double[] eyeX, eyeY, orbX, orbY;
     // Start is called before the first frame update
@@ -47,7 +48,7 @@ public class OrbitScript : MonoBehaviour
         _orbitTransform.RotateAround(this.transform.position,-transform.forward,rotationDirection * orbitSpeed * Time.deltaTime);
     }
 
-    public void Initialize(Vector2 startPos, Color color, float speed, bool clockwise, float diameter, bool isTarget)
+    public void Initialize(Vector2 startPos, Color color, float speed, bool clockwise, float diameter, bool isTarget, int id)
     {
         Start();
         orbitSpeed = speed;
@@ -56,6 +57,7 @@ public class OrbitScript : MonoBehaviour
         _orbitImage.color = color;
         rotationDirection = clockwise ? 1 : -1;
         _isTarget = isTarget;
+        _orbitId = id;
     }
 
     public void Offset(float angle)
@@ -86,7 +88,8 @@ public class OrbitScript : MonoBehaviour
         }
         //Remove oldest reading. Get normalised position and add it to the queue
         _readings.Dequeue();
-        _readings.Enqueue(GetNormalizedTrajectory());
+        Vector2 v = GetNormalizedTrajectory();
+        _readings.Enqueue(v);
         
         //Split X and Y arrays
         Vector2[] tempR = _readings.ToArray();
@@ -112,6 +115,9 @@ public class OrbitScript : MonoBehaviour
         
         //If threshold is passed call the event
         if(res != 0) OnSelected.Invoke();
+        
+        //Output
+        OutputMgr.Instance.AddOrbitTrajectory(_orbitId,v,correlation);
         return res;
     }
 }
