@@ -15,7 +15,7 @@ namespace DefaultNamespace
     class OutputData
     {
         private int _second;
-        private SortedList _orbitStrings;
+        private SortedList _orbitStrings = new SortedList();
         private String _eyeString = "";
         private String _testString = "";
         private DataType _type;
@@ -42,7 +42,7 @@ namespace DefaultNamespace
         public void AddOrbit(int orbitId, Vector2 trajectory, double minCorrelation)
         {
             Assert.AreNotEqual(_type,DataType.Test);
-            _orbitStrings.Add(orbitId, $"Orbit {orbitId}, Trajectory {trajectory}, Correlation {minCorrelation}");
+            if(!_orbitStrings.ContainsKey(orbitId))_orbitStrings.Add(orbitId, $"Orbit {orbitId}, Trajectory {trajectory}, Correlation {minCorrelation}");
         }
 
         public void AddEye(Vector2 trajectory)
@@ -104,7 +104,7 @@ namespace DefaultNamespace
         {
             if (outputList.ContainsKey(second))
             {
-                (outputList[second] as OutputData)?.AddOrbit(orbitId, trajectory,minCorrelation);
+                (outputList[second] as OutputData).AddOrbit(orbitId, trajectory,minCorrelation);
             }
             else
             {
@@ -116,7 +116,7 @@ namespace DefaultNamespace
         {
             if (outputList.ContainsKey(second))
             {
-                (outputList[second] as OutputData)?.AddEye(trajectory);
+                (outputList[second] as OutputData).AddEye(trajectory);
             }
             else
             {
