@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -12,6 +13,71 @@ namespace DefaultNamespace
         Trajectory
     }
 
+    struct OrbitInfo
+    {
+        internal int orbitId { get; }
+        internal string trajectory{ get; }
+        internal string correlation{ get; }
+
+        public OrbitInfo(int id, string traj, string corr)
+        {
+            orbitId = id;
+            trajectory = traj;
+            correlation = corr;
+        }
+    }
+    class CSVData
+    {
+        private int _frame;
+        private string _test = "";
+        private string _eyeTrajectory = "";
+        private SortedList<int,OrbitInfo> _orbitsInfos = new SortedList<int,OrbitInfo>();
+        public CSVData(int frame, string test, int orbitId, Vector2 trajectory, double minCorrelation)
+        {
+            _frame = frame;
+            _test = test;
+            _orbitsInfos.Add(orbitId, new OrbitInfo(orbitId,trajectory.ToString().Replace(',',':'),minCorrelation.ToString()));
+        }
+        public CSVData(int frame, string test, Vector2 trajectory)
+        {
+            _frame = frame;
+            _test = test;
+            _eyeTrajectory = trajectory.ToString().Replace(',',':');
+        }
+
+        public void SetTest(string test)
+        {
+            _test = test;
+        }
+        public void SetEye(Vector2 eye)
+        {
+            _eyeTrajectory = eye.ToString().Replace(',',':');
+        }
+        public void AddOrbit(int orbitId, Vector2 trajectory, double minCorrelation)
+        {
+            if (_orbitsInfos.ContainsKey(orbitId))
+            {
+                _orbitsInfos[orbitId] = new OrbitInfo(orbitId, trajectory.ToString().Replace(',',':'),minCorrelation.ToString());
+            }
+            else
+            {
+                _orbitsInfos.Add(orbitId, new OrbitInfo(orbitId, trajectory.ToString().Replace(',',':'),minCorrelation.ToString()));
+            }
+        }
+/*CSV OUTPUT:
+    Frame:  |Test:  |Eye Trajectory:    |OrbitId:   |Trajectory:    |Correlation:   
+ */
+        public String GetOutput()
+        {
+            string outstr = "";
+            foreach (OrbitInfo info in _orbitsInfos.Values)
+            {
+                outstr += $"{_frame},{_test},{_eyeTrajectory},{info.orbitId},{info.trajectory},{info.correlation}\n";
+            }
+            return outstr;
+        }
+        
+    }
     class OutputData
     {
         private int _second;
@@ -71,6 +137,12 @@ namespace DefaultNamespace
             }
         }
     }
+
+    public enum OutputType
+    {
+        TEXT,
+        CSV
+    }
     
     public class OutputMgr : MonoBehaviour
     {
@@ -78,10 +150,12 @@ namespace DefaultNamespace
         public static OutputMgr Instance { get { return instance != null ? instance : (instance = new GameObject("OutputMgr").AddComponent<OutputMgr>()); } }
 
         public string path = "Assets/TestData/";
-        private SortedList outputList = new SortedList(); 
-        
+        private SortedList outputList = new SortedList();
+
         private CustomFixedUpdate FU_instance;
         private int second = 0;
+        private string currTest = "";
+        private OutputType outputType = OutputType.TEXT;
         void Awake()
         {
             FU_instance = new CustomFixedUpdate(OnFixedUpdate,30);
@@ -95,43 +169,119 @@ namespace DefaultNamespace
             second++;
         }
 
+        public void SetOutputType(OutputType type)
+        {
+            outputType = type;
+        }
+
         public void StartNewTest(String name)
         {
-            if(!outputList.ContainsKey(second))outputList.Add(second, new OutputData(second, name));
+            switch (outputType)
+            {
+                case OutputType.TEXT:
+                    if(!outputList.ContainsKey(second))outputList.Add(second, new OutputData(second, name));
+                    break;
+                case OutputType.CSV:
+                    if(outputList.ContainsKey(second))(outputList[second] as CSVData).SetTest(name);
+                    currTest = name;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public void AddOrbitTrajectory(int orbitId, Vector2 trajectory, double minCorrelation)
         {
-            if (outputList.ContainsKey(second))
+            switch (outputType)
             {
-                (outputList[second] as OutputData).AddOrbit(orbitId, trajectory,minCorrelation);
+                case OutputType.TEXT:
+                    if (outputList.ContainsKey(second))
+                    {
+                        (outputList[second] as OutputData).AddOrbit(orbitId, trajectory,minCorrelation);
+                    }
+                    else
+                    {
+                        outputList.Add(second, new OutputData(second, orbitId, trajectory, minCorrelation));
+                    }
+                    break;
+                case OutputType.CSV:
+                    if (outputList.ContainsKey(second))
+                    {
+                        (outputList[second] as CSVData).AddOrbit(orbitId, trajectory,minCorrelation);
+                    }
+                    else
+                    {
+                        outputList.Add(second, new CSVData(second,currTest,orbitId, trajectory, minCorrelation));
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            else
-            {
-                outputList.Add(second, new OutputData(second, orbitId, trajectory, minCorrelation));
-            }
+            
         }
 
         public void AddEyeTrajectory(Vector2 trajectory)
         {
-            if (outputList.ContainsKey(second))
+            switch (outputType)
             {
-                (outputList[second] as OutputData).AddEye(trajectory);
+                case OutputType.TEXT:
+                    if (outputList.ContainsKey(second))
+                    {
+                        (outputList[second] as OutputData).AddEye(trajectory);
+                    }
+                    else
+                    {
+                        outputList.Add(second, new OutputData(second, trajectory));
+                    }
+                    break;
+                case OutputType.CSV:
+                    if (outputList.ContainsKey(second))
+                    {
+                        (outputList[second] as CSVData).SetEye(trajectory);
+                    }
+                    else
+                    {
+                        outputList.Add(second, new CSVData(second, currTest,trajectory));
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            else
-            {
-                outputList.Add(second, new OutputData(second, trajectory));
-            }
+            
         }
 
         public void Save()
         {
             String output = "";
+            String ext = "";
+            switch (outputType)
+            {
+                case OutputType.TEXT:
+                    ext = ".txt";
+                    break;
+                case OutputType.CSV:
+                    output = "Frame,Test,Eye Trajectory,OrbitID,Orbit Trajectory,Correlation\n";
+                    ext = ".csv";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             foreach (var oD in outputList.Values)
             {
-                output += (oD as OutputData)?.GetOutput();
+                switch (outputType)
+                {
+                    case OutputType.TEXT:
+                        output += (oD as OutputData)?.GetOutput();
+                        break;
+                    case OutputType.CSV:
+                        output += (oD as CSVData)?.GetOutput();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                
             }
-            var file = File.Open(path + DateTime.Now.ToString("dd-MM-yy_HH-mm") + ".txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            var file = File.Open(path + DateTime.Now.ToString("dd-MM-yy_HH-mm") + ext, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             StreamWriter writer = new StreamWriter(file);
             writer.Write(output);
             writer.Close();

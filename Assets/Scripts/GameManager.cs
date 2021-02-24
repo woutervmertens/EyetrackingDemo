@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        OutputMgr.Instance.SetOutputType(OutputType.CSV);
         Watch.SetActive(WatchMode);
         StaticScreen.SetActive(!WatchMode && StaticAlwaysOn);
         if (WatchMode)
