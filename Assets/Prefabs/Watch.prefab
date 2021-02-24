@@ -544,7 +544,7 @@ GameObject:
   - component: {fileID: 9082907945145940870}
   - component: {fileID: 9082907945145940864}
   - component: {fileID: 9082907945145940865}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -590,7 +590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: c62817a20faa7584ca7b6dd475193297, type: 2}
+  m_Material: {fileID: 2100000, guid: fc681f53ed6d6714eb1f0bc19d0de6a6, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1

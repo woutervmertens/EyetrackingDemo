@@ -120,7 +120,7 @@ public class OrbitScript : MonoBehaviour
         }
         
         //If threshold is passed call the event
-        if(res != 0) OnSelected.Invoke();
+        if(res == CompareResponse.TP) OnSelected.Invoke();
         
         //Output
         OutputMgr.Instance.AddOrbitTrajectory(_orbitId,v,correlation);

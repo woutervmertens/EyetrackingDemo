@@ -131,7 +131,8 @@ namespace DefaultNamespace
             {
                 output += (oD as OutputData)?.GetOutput();
             }
-            StreamWriter writer = new StreamWriter(path + DateTime.Now.ToString("dd-MM-yy_HH:mm"), true);
+            var file = File.Open(path + DateTime.Now.ToString("dd-MM-yy_HH-mm") + ".txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            StreamWriter writer = new StreamWriter(file);
             writer.Write(output);
             writer.Close();
         }
