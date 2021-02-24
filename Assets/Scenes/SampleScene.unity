@@ -2446,7 +2446,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WatchMode: 0
   StaticAlwaysOn: 1
-  SaveData: 1
+  SaveData: 0
   WindowSize: 30
   Watch: {fileID: 1858060429}
   StaticScreen: {fileID: 1492319248}
