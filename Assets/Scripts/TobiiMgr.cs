@@ -45,6 +45,8 @@ public class TobiiMgr : MonoBehaviour
                 return hmd.WorldToScreenPoint(screenPosition);
             }
             //return new Vector2(screenPosition.x, screenPosition.y);
+            //alt(https://github.com/lebbs/Healthlab-VR1/blob/9e4b59fe46569760206161fa0ad6139b0fef206a/HealthlabVR1-demo/Assets/CognitiveVR/Scripts/GazeBase.cs):
+            Vector2 screenpoint = hmd.WorldToScreenPoint(gazeRay.Origin + getHMDTransform().TransformDirection(gazeRay.Direction) * 10);
         }
         return new Vector2(0, 0);
     }
