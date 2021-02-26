@@ -73,7 +73,7 @@ public class OrbitScript : MonoBehaviour
     private Vector2 GetNormalizedTrajectory()
     {
         Vector2 pos = new Vector2(_orbitTransform.localPosition.x, _orbitTransform.localPosition.y);
-        return Tools.GetNormalizedTrajectory(pos, _prevPosition);;
+        return Tools.GetNormalizedTrajectory(pos, ref _prevPosition);
     }
 
     /// <summary>
@@ -123,7 +123,7 @@ public class OrbitScript : MonoBehaviour
         if(res == CompareResponse.TP) OnSelected.Invoke();
         
         //Output
-        OutputMgr.Instance.AddOrbitTrajectory(_orbitId,v,correlation);
+        OutputMgr.Instance.AddOrbitTrajectory(_orbitId,v, new Vector2(_orbitTransform.localPosition.x, _orbitTransform.localPosition.y),correlation);
         return res;
     }
 }

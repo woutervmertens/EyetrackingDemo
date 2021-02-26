@@ -17,12 +17,14 @@ namespace DefaultNamespace
     {
         internal int orbitId { get; }
         internal string trajectory{ get; }
+        internal string position { get; }
         internal string correlation{ get; }
 
-        public OrbitInfo(int id, string traj, string corr)
+        public OrbitInfo(int id, string traj, string pos, string corr)
         {
             orbitId = id;
             trajectory = traj;
+            position = pos;
             correlation = corr;
         }
     }
@@ -31,48 +33,60 @@ namespace DefaultNamespace
         private int _frame;
         private string _test = "";
         private string _eyeTrajectory = "";
+        private string _eyePos = "";
         private SortedList<int,OrbitInfo> _orbitsInfos = new SortedList<int,OrbitInfo>();
-        public CSVData(int frame, string test, int orbitId, Vector2 trajectory, double minCorrelation)
+        public CSVData(int frame, string test, int orbitId, Vector2 trajectory, Vector2 pos, double minCorrelation)
         {
             _frame = frame;
             _test = test;
-            _orbitsInfos.Add(orbitId, new OrbitInfo(orbitId,trajectory.ToString().Replace(',',':'),minCorrelation.ToString()));
+            _orbitsInfos.Add(orbitId, new OrbitInfo(orbitId, vec2toStr(trajectory), vec2toStr(pos),minCorrelation.ToString()));
         }
-        public CSVData(int frame, string test, Vector2 trajectory)
+        public CSVData(int frame, string test, Vector2 trajectory, Vector2 pos)
         {
             _frame = frame;
             _test = test;
-            _eyeTrajectory = trajectory.ToString().Replace(',',':');
+            _eyeTrajectory = vec2toStr(trajectory);
+            _eyePos = vec2toStr(pos);
+        }
+
+        private String vec2toStr(Vector2 vec)
+        {
+            return $"({vec.x},{vec.y})";
         }
 
         public void SetTest(string test)
         {
             _test = test;
         }
-        public void SetEye(Vector2 eye)
+        public void SetEye(Vector2 eyeTraj, Vector2 eyePos)
         {
-            _eyeTrajectory = eye.ToString().Replace(',',':');
+            _eyeTrajectory = vec2toStr(eyeTraj);
+            _eyePos = vec2toStr(eyePos);
         }
-        public void AddOrbit(int orbitId, Vector2 trajectory, double minCorrelation)
+        public void AddOrbit(int orbitId, Vector2 trajectory, Vector2 pos, double minCorrelation)
         {
             if (_orbitsInfos.ContainsKey(orbitId))
             {
-                _orbitsInfos[orbitId] = new OrbitInfo(orbitId, trajectory.ToString().Replace(',',':'),minCorrelation.ToString());
+                _orbitsInfos[orbitId] = new OrbitInfo(orbitId, vec2toStr(trajectory), vec2toStr(pos), minCorrelation.ToString());
             }
             else
             {
-                _orbitsInfos.Add(orbitId, new OrbitInfo(orbitId, trajectory.ToString().Replace(',',':'),minCorrelation.ToString()));
+                _orbitsInfos.Add(orbitId, new OrbitInfo(orbitId, vec2toStr(trajectory), vec2toStr(pos), minCorrelation.ToString()));
             }
         }
-/*CSV OUTPUT:
-    Frame:  |Test:  |Eye Trajectory:    |OrbitId:   |Trajectory:    |Correlation:   
- */
-        public String GetOutput()
+        public void AddCompareResponse(CompareResponse res)
+        {
+            //something
+        }
+        /*CSV OUTPUT:
+            Frame:  |Test:  |Eye Trajectory:    |OrbitId:   |Trajectory:    |Correlation:   
+         */
+        public String GetOutput(string del)
         {
             string outstr = "";
             foreach (OrbitInfo info in _orbitsInfos.Values)
             {
-                outstr += $"{_frame},{_test},{_eyeTrajectory},{info.orbitId},{info.trajectory},{info.correlation}\n";
+                outstr += $"{_frame}{del}{_test}{del}{_eyeTrajectory}{del}{_eyePos}{del}{info.orbitId}{del}{info.trajectory}{del}{info.position}{del}{info.correlation}\n";
             }
             return outstr;
         }
@@ -117,6 +131,11 @@ namespace DefaultNamespace
             _eyeString = $"Eye Trajectory {trajectory}";
         }
 
+        public void AddCompareResponse(CompareResponse res)
+        {
+            //something
+        }
+
         public String GetOutput()
         {
             switch (_type)
@@ -156,6 +175,8 @@ namespace DefaultNamespace
         private int second = 0;
         private string currTest = "";
         private OutputType outputType = OutputType.TEXT;
+        private bool _saveData;
+        private string del = "\t";
         void Awake()
         {
             FU_instance = new CustomFixedUpdate(OnFixedUpdate,30);
@@ -190,7 +211,7 @@ namespace DefaultNamespace
             }
         }
 
-        public void AddOrbitTrajectory(int orbitId, Vector2 trajectory, double minCorrelation)
+        public void AddOrbitTrajectory(int orbitId, Vector2 trajectory, Vector2 pos, double minCorrelation)
         {
             switch (outputType)
             {
@@ -207,11 +228,11 @@ namespace DefaultNamespace
                 case OutputType.CSV:
                     if (outputList.ContainsKey(second))
                     {
-                        (outputList[second] as CSVData).AddOrbit(orbitId, trajectory,minCorrelation);
+                        (outputList[second] as CSVData).AddOrbit(orbitId, trajectory,pos,minCorrelation);
                     }
                     else
                     {
-                        outputList.Add(second, new CSVData(second,currTest,orbitId, trajectory, minCorrelation));
+                        outputList.Add(second, new CSVData(second,currTest,orbitId, trajectory,pos, minCorrelation));
                     }
                     break;
                 default:
@@ -220,7 +241,7 @@ namespace DefaultNamespace
             
         }
 
-        public void AddEyeTrajectory(Vector2 trajectory)
+        public void AddEyeTrajectory(Vector2 trajectory,Vector2 pos)
         {
             switch (outputType)
             {
@@ -237,11 +258,11 @@ namespace DefaultNamespace
                 case OutputType.CSV:
                     if (outputList.ContainsKey(second))
                     {
-                        (outputList[second] as CSVData).SetEye(trajectory);
+                        (outputList[second] as CSVData).SetEye(trajectory,pos);
                     }
                     else
                     {
-                        outputList.Add(second, new CSVData(second, currTest,trajectory));
+                        outputList.Add(second, new CSVData(second, currTest,trajectory,pos));
                     }
                     break;
                 default:
@@ -249,6 +270,16 @@ namespace DefaultNamespace
             }
             
         }
+        public void AddCompareResponse(CompareResponse res)
+        {
+            //something
+        }
+        private void OnDestroy()
+        {
+            if (_saveData) OutputMgr.Instance.Save();
+        }
+
+        public void Activate(bool b) { _saveData = b; }
 
         public void Save()
         {
@@ -260,7 +291,7 @@ namespace DefaultNamespace
                     ext = ".txt";
                     break;
                 case OutputType.CSV:
-                    output = "Frame,Test,Eye Trajectory,OrbitID,Orbit Trajectory,Correlation\n";
+                    output = $"Frame{del}Test{del}Eye Trajectory{del}Eye pos{del}OrbitID{del}Orbit Trajectory{del}Orbit pos{del}Correlation\n";
                     ext = ".csv";
                     break;
                 default:
@@ -274,7 +305,7 @@ namespace DefaultNamespace
                         output += (oD as OutputData)?.GetOutput();
                         break;
                     case OutputType.CSV:
-                        output += (oD as CSVData)?.GetOutput();
+                        output += (oD as CSVData)?.GetOutput(del);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

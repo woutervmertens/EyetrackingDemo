@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         OutputMgr.Instance.SetOutputType(OutputType.CSV);
+        OutputMgr.Instance.Activate(SaveData);
         Watch.SetActive(WatchMode);
         StaticScreen.SetActive(!WatchMode && StaticAlwaysOn);
         if (WatchMode)
@@ -61,10 +62,7 @@ public class GameManager : MonoBehaviour
         CallOrbitsCompare();
     }
 
-    private void OnDestroy()
-    {
-        if(SaveData)OutputMgr.Instance.Save();
-    }
+    
 
     private void CallOrbitsCompare()
     {
@@ -82,13 +80,12 @@ public class GameManager : MonoBehaviour
         if (GameStateMgr.Instance.State != GameState.Measuring) return;
         //Add the new data (normalized)
         Vector2 vd = TobiiMgr.Instance.GetViewData();
-        Vector2 v = Tools.GetNormalizedTrajectory(vd, _prevEyePos);
-        _prevEyePos = vd;
+        Vector2 v = Tools.GetNormalizedTrajectory(vd, ref _prevEyePos);
         eyegazeData.Enqueue(v);
         //Limit the amount of datapoints
         if (eyegazeData.Count > WindowSize) eyegazeData.Dequeue();
         //Output
-        OutputMgr.Instance.AddEyeTrajectory(v);
+        OutputMgr.Instance.AddEyeTrajectory(v,vd);
     }
 
     private void HandleCompareResponse(CompareResponse res)
@@ -102,5 +99,6 @@ public class GameManager : MonoBehaviour
                 FPcount++;
                 break;
         }
+        OutputMgr.Instance.AddCompareResponse(res);
     }
 }

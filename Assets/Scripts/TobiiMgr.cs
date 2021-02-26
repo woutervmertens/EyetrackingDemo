@@ -37,16 +37,15 @@ public class TobiiMgr : MonoBehaviour
         TobiiXR_GazeRay gazeRay = eyeTrackingData.GazeRay;
         if (gazeRay.IsValid)
         {
-            Ray ray = new Ray(gazeRay.Origin, gazeRay.Direction);
+            return hmd.WorldToScreenPoint(gazeRay.Origin + gazeRay.Direction.normalized * 10);
+            
+            /*Ray ray = new Ray(gazeRay.Origin, gazeRay.Direction);
             float enter = 0.0f;
             if(plane.Raycast(ray, out enter))
             {
                 Vector3 screenPosition = ray.GetPoint(enter);
                 return hmd.WorldToScreenPoint(screenPosition);
-            }
-            //return new Vector2(screenPosition.x, screenPosition.y);
-            //alt(https://github.com/lebbs/Healthlab-VR1/blob/9e4b59fe46569760206161fa0ad6139b0fef206a/HealthlabVR1-demo/Assets/CognitiveVR/Scripts/GazeBase.cs):
-            Vector2 screenpoint = hmd.WorldToScreenPoint(gazeRay.Origin + getHMDTransform().TransformDirection(gazeRay.Direction) * 10);
+            }*/
         }
         return new Vector2(0, 0);
     }
