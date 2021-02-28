@@ -106,7 +106,7 @@ public class Tracking_Data_Manager : MonoBehaviour
         var provider = TobiiXR.Internal.Provider;
         var eyeTrackingData = EyeTrackingDataHelper.Clone(provider.EyeTrackingDataLocal);
         var localToWorldMatrix = provider.LocalToWorldMatrix;
-        var worldForward = localToWorldMatrix.MultiplyVector(Vector3.forward);
+        //var worldForward = localToWorldMatrix.MultiplyVector(Vector3.forward);
         EyeTrackingDataHelper.TransformGazeData(eyeTrackingData, localToWorldMatrix);
 
         var gazeRay = eyeTrackingData.GazeRay;

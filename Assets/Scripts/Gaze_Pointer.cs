@@ -9,7 +9,7 @@ public class Gaze_Pointer : Pointer
 	// Use this for initialization
 	void Start ()
 	{
-		//Tracking_Data_Manager.OnNewProcessedGazeRay += Point;
+		Tracking_Data_Manager.OnNewProcessedGazeRay += Point;
 	}
 	
 	// Update is called once per frame

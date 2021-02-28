@@ -126,6 +126,7 @@ public class Pointer : MonoBehaviour {
 		RaycastHit hit;
 		float hitDistance = 0;
 
+		//sphere moves along ray and returns hits
 		if (Physics.SphereCast (ray, rayRadius, out hit, rayDistance, rayLayerMask)) 
 		{
 			pointedObject = hit.collider.gameObject;

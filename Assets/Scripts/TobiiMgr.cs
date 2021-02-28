@@ -7,6 +7,9 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 public class TobiiMgr : MonoBehaviour
 {
+    public float rayRadius = 0.05f;
+    public float rayDistance = 100f;
+    public int rayLayerMask = 1 << 9;
     float _defaultDistance = 2f;
     Plane plane;
     Vector3 distanceFromCamera;
@@ -31,13 +34,28 @@ public class TobiiMgr : MonoBehaviour
     /// <returns>A vector2 between (-1,-1) and (1,1)</returns>
     public Vector2 GetViewData()
     {
-        distanceFromCamera = new Vector3(hmd.transform.position.x, hmd.transform.position.y, hmd.transform.position.z - _defaultDistance);
+        /*distanceFromCamera = new Vector3(hmd.transform.position.x, hmd.transform.position.y, hmd.transform.position.z - _defaultDistance);
         plane.Translate(distanceFromCamera);
-        var eyeTrackingData = TobiiXR.GetEyeTrackingData(TobiiXR_TrackingSpace.Local);
+        var eyeTrackingData = TobiiXR.GetEyeTrackingData(TobiiXR_TrackingSpace.Local);*/
+        var provider = TobiiXR.Internal.Provider;
+        var eyeTrackingData = EyeTrackingDataHelper.Clone(provider.EyeTrackingDataLocal);
+        var localToWorldMatrix = provider.LocalToWorldMatrix;
+        //var worldForward = localToWorldMatrix.MultiplyVector(Vector3.forward);
+        EyeTrackingDataHelper.TransformGazeData(eyeTrackingData, localToWorldMatrix);
+        
         TobiiXR_GazeRay gazeRay = eyeTrackingData.GazeRay;
         if (gazeRay.IsValid)
         {
-            return hmd.WorldToScreenPoint(gazeRay.Origin + gazeRay.Direction.normalized * 10);
+            
+            RaycastHit hit;
+            float hitDistance = 0;
+            Ray ray = new Ray(gazeRay.Origin, gazeRay.Direction);
+            //sphere moves along ray and returns hits
+            hitDistance = (Physics.SphereCast (ray, rayRadius, out hit, rayDistance, rayLayerMask)) ? hit.distance : rayDistance / 100f;
+            
+            return hmd.WorldToScreenPoint(ray.GetPoint(hitDistance));
+
+            //return hmd.WorldToScreenPoint(gazeRay.Origin + gazeRay.Direction.normalized * 10);
             
             /*Ray ray = new Ray(gazeRay.Origin, gazeRay.Direction);
             float enter = 0.0f;
