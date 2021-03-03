@@ -51,7 +51,7 @@ namespace DefaultNamespace
 
         private String vec2toStr(Vector2 vec)
         {
-            return $"({vec.x},{vec.y})";
+            return $"{vec.x}\t{vec.y}";
         }
 
         public void SetTest(string test)
@@ -291,7 +291,7 @@ namespace DefaultNamespace
                     ext = ".txt";
                     break;
                 case OutputType.CSV:
-                    output = $"Frame{del}Test{del}Eye Trajectory{del}Eye pos{del}OrbitID{del}Orbit Trajectory{del}Orbit pos{del}Correlation\n";
+                    output = $"Frame{del}Test{del}Eye Trajectory x{del}Eye Trajectory y{del}Eye pos x{del}Eye pos y{del}OrbitID{del}Orbit Trajectory x{del}Orbit Trajectory y{del}Orbit pos x{del}Orbit pos y{del}Correlation\n";
                     ext = ".csv";
                     break;
                 default:
