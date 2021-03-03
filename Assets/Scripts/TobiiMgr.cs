@@ -39,9 +39,10 @@ public class TobiiMgr : MonoBehaviour
             RaycastHit hit;
             float hitDistance = 1f;
             Ray ray = new Ray(gazeRay.Origin, gazeRay.Direction);
-            //sphere moves along ray and returns hits
+            //sphere moves along ray and returns hits Note: ray doesn't line up
             //hitDistance = (Physics.SphereCast (ray, rayRadius, out hit, rayDistance, rayLayerMask)) ? hit.distance : rayDistance / 10f;
             Debug.DrawRay(gazeRay.Origin, gazeRay.Direction, Color.red);
+            Debug.DrawRay(ray.origin,ray.direction,Color.green);
             
             return hmd.WorldToScreenPoint(ray.GetPoint(hitDistance));
         }
