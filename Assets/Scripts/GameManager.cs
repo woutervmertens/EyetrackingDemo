@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public Boolean StaticAlwaysOn = true;
     public Boolean SaveData = false;
     public int WindowSize = 30;
+    private int startup = 0;
 
     public GameObject Watch;
     public GameObject StaticScreen;
@@ -68,10 +69,11 @@ public class GameManager : MonoBehaviour
     {
         if (GameStateMgr.Instance.State != GameState.Measuring) return;
         ArrayList _orbits = _screenController.GetOrbits();
+        Vector2[] tempR = eyegazeData.ToArray();
         for (var i = 0; i < _orbits.Count; i++)
         {
             var o = (OrbitScript) _orbits[i];
-            HandleCompareResponse(o.Compare(eyegazeData.ToArray()));
+            HandleCompareResponse(o.Compare(tempR));
         }
     }
 
@@ -81,9 +83,13 @@ public class GameManager : MonoBehaviour
         //Add the new data (normalized)
         Vector2 vd = TobiiMgr.Instance.GetViewData();
         Vector2 v = Tools.GetNormalizedTrajectory(vd, ref _prevEyePos);
+        if (startup++ < WindowSize)
+        {
+            eyegazeData.Enqueue(v);
+            return;
+        }
+        eyegazeData.Dequeue();
         eyegazeData.Enqueue(v);
-        //Limit the amount of datapoints
-        if (eyegazeData.Count > WindowSize) eyegazeData.Dequeue();
         //Output
         OutputMgr.Instance.AddEyeTrajectory(v,vd);
     }

@@ -72,7 +72,7 @@ public class OrbitScript : MonoBehaviour
 
     private Vector2 GetNormalizedTrajectory()
     {
-        Vector2 pos = new Vector2(_orbitTransform.localPosition.x, _orbitTransform.localPosition.y);
+        Vector2 pos = TobiiMgr.Instance.WTS(_orbitTransform.position);
         return Tools.GetNormalizedTrajectory(pos, ref _prevPosition);
     }
 
@@ -85,15 +85,15 @@ public class OrbitScript : MonoBehaviour
     public CompareResponse Compare(Vector2[] eyeReadings, float threshold = 0.8f)
     {
         CompareResponse res = CompareResponse.N;
+        Vector2 v = GetNormalizedTrajectory();
         //Don't start until window is filled
         if (_startUp++ < _windowsize)
         {
-            _readings.Enqueue(GetNormalizedTrajectory());
+            _readings.Enqueue(v);
             return res;
         }
         //Remove oldest reading. Get normalised position and add it to the queue
         _readings.Dequeue();
-        Vector2 v = GetNormalizedTrajectory();
         _readings.Enqueue(v);
         
         //Split X and Y arrays
@@ -123,7 +123,9 @@ public class OrbitScript : MonoBehaviour
         if(res == CompareResponse.TP) OnSelected.Invoke();
         
         //Output
-        OutputMgr.Instance.AddOrbitTrajectory(_orbitId,v, new Vector2(_orbitTransform.localPosition.x, _orbitTransform.localPosition.y),correlation);
+        OutputMgr.Instance.AddOrbitTrajectory(_orbitId,v, TobiiMgr.Instance.WTS(_orbitTransform.position), correlation);
         return res;
     }
+
+    
 }
