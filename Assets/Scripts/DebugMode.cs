@@ -11,6 +11,10 @@ public class DebugMode : MonoBehaviour
         _target = t;
     }
 
+    /// <summary>
+    /// Returns the screen position of the target
+    /// </summary>
+    /// <returns>Vector2</returns>
     public Vector2 GetDebugEyeData()
     {
         return TobiiMgr.Instance.WTS(_target.GetOrbitPosition());

@@ -43,6 +43,7 @@ public class TobiiMgr : MonoBehaviour
             //hitDistance = (Physics.SphereCast (ray, rayRadius, out hit, rayDistance, rayLayerMask)) ? hit.distance : rayDistance / 10f;
             Debug.DrawRay(gazeRay.Origin, gazeRay.Direction, Color.red);
             Debug.DrawRay(ray.origin,ray.direction,Color.green);
+            Debug.DrawRay(ray.origin,ray.GetPoint(hitDistance),Color.blue);
             
             return hmd.WorldToScreenPoint(ray.GetPoint(hitDistance));
         }
