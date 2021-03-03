@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public Boolean WatchMode = true;
     public Boolean StaticAlwaysOn = true;
     public Boolean SaveData = false;
+    public Boolean DebugEyetrack = false;
     public int WindowSize = 30;
     private int startup = 0;
 
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour
     
     private Queue<Vector2> eyegazeData = new Queue<Vector2>(); // holds the normalised trajectories of the eye
     private Vector2 _prevEyePos = Vector2.zero;
+    public DebugMode debugMode;
     private int TPcount, FPcount = 0;
 
     void Awake()
@@ -81,15 +83,11 @@ public class GameManager : MonoBehaviour
     {
         if (GameStateMgr.Instance.State != GameState.Measuring) return;
         //Add the new data (normalized)
-        Vector2 vd = TobiiMgr.Instance.GetViewData();
+        Vector2 vd = (!DebugEyetrack)?TobiiMgr.Instance.GetViewData():debugMode.GetDebugEyeData();
         Vector2 v = Tools.GetNormalizedTrajectory(vd, ref _prevEyePos);
-        if (startup++ < WindowSize)
-        {
-            eyegazeData.Enqueue(v);
-            return;
-        }
-        eyegazeData.Dequeue();
         eyegazeData.Enqueue(v);
+        //Limit the amount of datapoints
+        if (eyegazeData.Count > WindowSize) eyegazeData.Dequeue();
         //Output
         OutputMgr.Instance.AddEyeTrajectory(v,vd);
     }

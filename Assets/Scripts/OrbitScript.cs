@@ -70,6 +70,11 @@ public class OrbitScript : MonoBehaviour
         OnSelected.AddListener(call);
     }
 
+    public Vector3 GetOrbitPosition()
+    {
+        return _orbitTransform.position;
+    }
+
     private Vector2 GetNormalizedTrajectory()
     {
         Vector2 pos = TobiiMgr.Instance.WTS(_orbitTransform.position);

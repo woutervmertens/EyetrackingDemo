@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class TestDetection : MenuScreen
 {
+    public DebugMode debugMode;
     public Text text;
     private int i = 0;
     public override void OnTriggered(int n)
@@ -23,6 +24,7 @@ public class TestDetection : MenuScreen
         
         //Create new orbits
         _screenController.AddOrbit(new Vector2(0,0),0.3f,Color.red, 120f,1 , true,true);
+        debugMode.SetTarget(_screenController.GetOrbits()[0] as OrbitScript);
         //_screenController.AddOrbit(new Vector2(0,0),0.3f,Color.black, 120f,2 );
         
         //Output
