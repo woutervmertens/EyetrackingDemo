@@ -28,24 +28,21 @@ public class TobiiMgr : MonoBehaviour
     /// <returns>A vector2</returns>
     public Vector2 GetViewData()
     {
-        var provider = TobiiXR.Internal.Provider;
+        /*var provider = TobiiXR.Internal.Provider;
         var eyeTrackingData = EyeTrackingDataHelper.Clone(provider.EyeTrackingDataLocal);
         var localToWorldMatrix = provider.LocalToWorldMatrix;
-        EyeTrackingDataHelper.TransformGazeData(eyeTrackingData, localToWorldMatrix);
-        
+        EyeTrackingDataHelper.TransformGazeData(eyeTrackingData, localToWorldMatrix);*/
+        var eyeTrackingData = TobiiXR.GetEyeTrackingData(TobiiXR_TrackingSpace.World);
+
         TobiiXR_GazeRay gazeRay = eyeTrackingData.GazeRay;
         if (gazeRay.IsValid)
         {
             RaycastHit hit;
-            float hitDistance = 1f;
+            float hitDistance = 4f;
             Ray ray = new Ray(gazeRay.Origin, gazeRay.Direction);
-            //sphere moves along ray and returns hits Note: ray doesn't line up
-            //hitDistance = (Physics.SphereCast (ray, rayRadius, out hit, rayDistance, rayLayerMask)) ? hit.distance : rayDistance / 10f;
-            Debug.DrawRay(gazeRay.Origin, gazeRay.Direction, Color.red);
-            Debug.DrawRay(ray.origin,ray.direction,Color.green);
-            Debug.DrawRay(ray.origin,ray.GetPoint(hitDistance),Color.blue);
-            
-            return hmd.WorldToScreenPoint(ray.GetPoint(hitDistance));
+            Debug.DrawLine(ray.origin,ray.GetPoint(hitDistance),Color.blue);
+            Vector2 scrnPos = hmd.WorldToScreenPoint(ray.GetPoint(hitDistance));
+            return new Vector2(scrnPos.x / hmd.pixelWidth, scrnPos.y / hmd.pixelHeight) ;
         }
         return new Vector2(0, 0);
     }
