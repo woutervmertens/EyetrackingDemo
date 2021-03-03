@@ -11,7 +11,9 @@ public class GameManager : MonoBehaviour
     public Boolean StaticAlwaysOn = true;
     public Boolean SaveData = false;
     public Boolean DebugEyetrack = false;
+    public Boolean UseMovingAverage = false;
     public int WindowSize = 30;
+    public int SMAPeriod = 5;
     private int startup = 0;
 
     public GameObject Watch;
@@ -23,6 +25,7 @@ public class GameManager : MonoBehaviour
     private Vector2 _prevEyePos = Vector2.zero;
     public DebugMode debugMode;
     private int TPcount, FPcount = 0;
+    private Func<float, float> sma_x, sma_y;
 
     void Awake()
     {
@@ -45,6 +48,8 @@ public class GameManager : MonoBehaviour
         }
 
         GameStateMgr.Instance.State = GameState.Measuring;
+        sma_x = Tools.SMA(SMAPeriod);
+        sma_y = Tools.SMA(SMAPeriod);
         //Test
         //_screenController.AddOrbit(new Vector2(0,0),0.003f,Color.red, 120f,1 );
     }
@@ -84,7 +89,8 @@ public class GameManager : MonoBehaviour
         if (GameStateMgr.Instance.State != GameState.Measuring) return;
         //Add the new data (normalized)
         Vector2 vd = (!DebugEyetrack)?TobiiMgr.Instance.GetViewData():debugMode.GetDebugEyeData();
-        Vector2 v = Tools.GetNormalizedTrajectory(vd, ref _prevEyePos);
+        Vector2 sma_vd = new Vector2(sma_x(vd.x),sma_y(vd.y));
+        Vector2 v = Tools.GetNormalizedTrajectory((!UseMovingAverage)?vd:sma_vd, ref _prevEyePos);
         eyegazeData.Enqueue(v);
         //Limit the amount of datapoints
         if (eyegazeData.Count > WindowSize) eyegazeData.Dequeue();

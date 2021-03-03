@@ -1,3 +1,7 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace DefaultNamespace
@@ -12,6 +16,17 @@ namespace DefaultNamespace
             oldPos.Set(newPos.x,newPos.y);
             //return the normalized trajectory
             return traj.normalized;
+        }
+
+        public static Func<float, float> SMA(int p)
+        {
+            Queue<float> s = new Queue<float>(p);
+            return (x) =>
+            {
+                if (s.Count >= p) s.Dequeue();
+                s.Enqueue(x);
+                return s.Average();
+            };
         }
     }
 }
