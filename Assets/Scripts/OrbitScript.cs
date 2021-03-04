@@ -78,7 +78,8 @@ public class OrbitScript : MonoBehaviour
     private Vector2 GetNormalizedTrajectory()
     {
         Vector2 pos = TobiiMgr.Instance.WTS(_orbitTransform.position);
-        return Tools.GetNormalizedTrajectory(pos, ref _prevPosition);
+        return pos.normalized;
+        //return Tools.GetNormalizedTrajectory(pos, ref _prevPosition);
     }
 
     /// <summary>

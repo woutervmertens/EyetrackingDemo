@@ -89,8 +89,9 @@ public class GameManager : MonoBehaviour
         if (GameStateMgr.Instance.State != GameState.Measuring) return;
         //Add the new data (normalized)
         Vector2 vd = (!DebugEyetrack)?TobiiMgr.Instance.GetViewData():debugMode.GetDebugEyeData();
-        Vector2 sma_vd = new Vector2(sma_x(vd.x),sma_y(vd.y));
-        Vector2 v = Tools.GetNormalizedTrajectory((!UseMovingAverage)?vd:sma_vd, ref _prevEyePos);
+        //Vector2 sma_vd = new Vector2(sma_x(vd.x),sma_y(vd.y));
+        //Vector2 v = Tools.GetNormalizedTrajectory((!UseMovingAverage)?vd:sma_vd, ref _prevEyePos);
+        Vector2 v = vd.normalized;
         eyegazeData.Enqueue(v);
         //Limit the amount of datapoints
         if (eyegazeData.Count > WindowSize) eyegazeData.Dequeue();
