@@ -10,20 +10,20 @@ namespace DefaultNamespace
     enum DataType
     {
         Test,
-        Trajectory
+        Measurement
     }
 
     struct OrbitInfo
     {
         internal int orbitId { get; }
-        internal string trajectory{ get; }
+        internal string normalised{ get; }
         internal string position { get; }
         internal string correlation{ get; }
 
-        public OrbitInfo(int id, string traj, string pos, string corr)
+        public OrbitInfo(int id, string norm, string pos, string corr)
         {
             orbitId = id;
-            trajectory = traj;
+            normalised = norm;
             position = pos;
             correlation = corr;
         }
@@ -35,17 +35,17 @@ namespace DefaultNamespace
         private string _eyeTrajectory = "";
         private string _eyePos = "";
         private SortedList<int,OrbitInfo> _orbitsInfos = new SortedList<int,OrbitInfo>();
-        public CSVData(int frame, string test, int orbitId, Vector2 trajectory, Vector2 pos, double minCorrelation)
+        public CSVData(int frame, string test, int orbitId, Vector2 norm, Vector2 pos, double minCorrelation)
         {
             _frame = frame;
             _test = test;
-            _orbitsInfos.Add(orbitId, new OrbitInfo(orbitId, vec2toStr(trajectory), vec2toStr(pos),minCorrelation.ToString()));
+            _orbitsInfos.Add(orbitId, new OrbitInfo(orbitId, vec2toStr(norm), vec2toStr(pos),minCorrelation.ToString()));
         }
-        public CSVData(int frame, string test, Vector2 trajectory, Vector2 pos)
+        public CSVData(int frame, string test, Vector2 norm, Vector2 pos)
         {
             _frame = frame;
             _test = test;
-            _eyeTrajectory = vec2toStr(trajectory);
+            _eyeTrajectory = vec2toStr(norm);
             _eyePos = vec2toStr(pos);
         }
 
@@ -58,20 +58,20 @@ namespace DefaultNamespace
         {
             _test = test;
         }
-        public void SetEye(Vector2 eyeTraj, Vector2 eyePos)
+        public void SetEye(Vector2 eyeNorm, Vector2 eyePos)
         {
-            _eyeTrajectory = vec2toStr(eyeTraj);
+            _eyeTrajectory = vec2toStr(eyeNorm);
             _eyePos = vec2toStr(eyePos);
         }
-        public void AddOrbit(int orbitId, Vector2 trajectory, Vector2 pos, double minCorrelation)
+        public void AddOrbit(int orbitId, Vector2 norm, Vector2 pos, double minCorrelation)
         {
             if (_orbitsInfos.ContainsKey(orbitId))
             {
-                _orbitsInfos[orbitId] = new OrbitInfo(orbitId, vec2toStr(trajectory), vec2toStr(pos), minCorrelation.ToString());
+                _orbitsInfos[orbitId] = new OrbitInfo(orbitId, vec2toStr(norm), vec2toStr(pos), minCorrelation.ToString());
             }
             else
             {
-                _orbitsInfos.Add(orbitId, new OrbitInfo(orbitId, vec2toStr(trajectory), vec2toStr(pos), minCorrelation.ToString()));
+                _orbitsInfos.Add(orbitId, new OrbitInfo(orbitId, vec2toStr(norm), vec2toStr(pos), minCorrelation.ToString()));
             }
         }
         public void AddCompareResponse(CompareResponse res)
@@ -79,14 +79,14 @@ namespace DefaultNamespace
             //something
         }
         /*CSV OUTPUT:
-            Frame:  |Test:  |Eye Trajectory:    |OrbitId:   |Trajectory:    |Correlation:   
+            Frame:  |Test:  |Eye Norm:    |OrbitId:   |Norm:    |Correlation:   
          */
         public String GetOutput(string del)
         {
             string outstr = "";
             foreach (OrbitInfo info in _orbitsInfos.Values)
             {
-                outstr += $"{_frame}{del}{_test}{del}{_eyeTrajectory}{del}{_eyePos}{del}{info.orbitId}{del}{info.trajectory}{del}{info.position}{del}{info.correlation}\n";
+                outstr += $"{_frame}{del}{_test}{del}{_eyeTrajectory}{del}{_eyePos}{del}{info.orbitId}{del}{info.normalised}{del}{info.position}{del}{info.correlation}\n";
             }
             return outstr;
         }
@@ -110,13 +110,13 @@ namespace DefaultNamespace
         {
             _second = second;
             _orbitStrings.Add(orbitId, $"Orbit {orbitId}, Trajectory {trajectory}, Correlation {minCorrelation}");
-            _type = DataType.Trajectory;
+            _type = DataType.Measurement;
         }
         public OutputData(int second, Vector2 trajectory)
         {
             _second = second;
             _eyeString = $"Eye Trajectory {trajectory}";
-            _type = DataType.Trajectory;
+            _type = DataType.Measurement;
         }
 
         public void AddOrbit(int orbitId, Vector2 trajectory, double minCorrelation)
@@ -143,7 +143,7 @@ namespace DefaultNamespace
                 case DataType.Test:
                     return _testString;
                     break;
-                case DataType.Trajectory:
+                case DataType.Measurement:
                     String o = "";
                     foreach (var str in _orbitStrings.Values)
                     {
@@ -291,7 +291,7 @@ namespace DefaultNamespace
                     ext = ".txt";
                     break;
                 case OutputType.CSV:
-                    output = $"Frame{del}Test{del}Eye Trajectory x{del}Eye Trajectory y{del}Eye pos x{del}Eye pos y{del}OrbitID{del}Orbit Trajectory x{del}Orbit Trajectory y{del}Orbit pos x{del}Orbit pos y{del}Correlation\n";
+                    output = $"Frame{del}Test{del}Eye Norm x{del}Eye Norm y{del}Eye pos x{del}Eye pos y{del}OrbitID{del}Orbit Norm x{del}Orbit Norm y{del}Orbit pos x{del}Orbit pos y{del}Correlation\n";
                     ext = ".csv";
                     break;
                 default:

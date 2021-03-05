@@ -26,12 +26,8 @@ public class TobiiMgr : MonoBehaviour
     /// Takes the gazeRay from the eyetrackingdata, if it is valid returns the world to screen point the eye is looking at.
     /// </summary>
     /// <returns>A vector2</returns>
-    public Vector2 GetViewData()
+    public Vector3 GetViewData()
     {
-        /*var provider = TobiiXR.Internal.Provider;
-        var eyeTrackingData = EyeTrackingDataHelper.Clone(provider.EyeTrackingDataLocal);
-        var localToWorldMatrix = provider.LocalToWorldMatrix;
-        EyeTrackingDataHelper.TransformGazeData(eyeTrackingData, localToWorldMatrix);*/
         var eyeTrackingData = TobiiXR.GetEyeTrackingData(TobiiXR_TrackingSpace.World);
 
         TobiiXR_GazeRay gazeRay = eyeTrackingData.GazeRay;
@@ -41,10 +37,9 @@ public class TobiiMgr : MonoBehaviour
             float hitDistance = 4f;
             Ray ray = new Ray(gazeRay.Origin, gazeRay.Direction);
             Debug.DrawLine(ray.origin,ray.GetPoint(hitDistance),Color.blue);
-            Vector2 scrnPos = hmd.WorldToScreenPoint(ray.GetPoint(hitDistance));
-            return new Vector2(scrnPos.x / hmd.pixelWidth, scrnPos.y / hmd.pixelHeight) ;
+            return ray.GetPoint(hitDistance);
         }
-        return new Vector2(0, 0);
+        return Vector3.zero;
     }
 
     private Transform getHMDTransform()
@@ -58,7 +53,12 @@ public class TobiiMgr : MonoBehaviour
         if (!hmd) Start();
         return hmd.WorldToScreenPoint(v);
     }
-   
+
+    public Vector2 GetNormalizedScreenPosition(Vector3 worldPos)
+    {
+        return WTS(worldPos).normalized;
+    }
+
 
     public Vector3 GetHMDPosition()
     {

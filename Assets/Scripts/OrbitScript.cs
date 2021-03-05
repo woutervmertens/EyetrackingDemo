@@ -25,7 +25,6 @@ public class OrbitScript : MonoBehaviour
     private float _diameter = 0.1f;
     
     private Queue<Vector2> _readings = new Queue<Vector2>();
-    private Vector2 _prevPosition = Vector2.zero;
 
     private Boolean _isTarget = false;
 
@@ -75,23 +74,16 @@ public class OrbitScript : MonoBehaviour
         return _orbitTransform.position;
     }
 
-    private Vector2 GetNormalizedTrajectory()
-    {
-        Vector2 pos = TobiiMgr.Instance.WTS(_orbitTransform.position);
-        return pos.normalized;
-        //return Tools.GetNormalizedTrajectory(pos, ref _prevPosition);
-    }
-
     /// <summary>
     /// Adds new position to the window, calculates the Pearson's correlation and reacts when the threshold is crossed.
     /// </summary>
     /// <param name="eyeReadings">The window of the eyetracking data.</param>
     /// <param name="threshold">The threshold to be crossed before a Positive is signaled.</param>
     /// <returns>A CompareResponse value.</returns>
-    public CompareResponse Compare(Vector2[] eyeReadings, float threshold = 0.8f)
+    public CompareResponse Compare(in Vector2[] eyeReadings, float threshold = 0.8f)
     {
         CompareResponse res = CompareResponse.N;
-        Vector2 v = GetNormalizedTrajectory();
+        Vector2 v = TobiiMgr.Instance.GetNormalizedScreenPosition(GetOrbitPosition());
         //Don't start until window is filled
         if (_startUp++ < _windowsize)
         {
@@ -129,7 +121,7 @@ public class OrbitScript : MonoBehaviour
         if(res == CompareResponse.TP) OnSelected.Invoke();
         
         //Output
-        OutputMgr.Instance.AddOrbitTrajectory(_orbitId,v, TobiiMgr.Instance.WTS(_orbitTransform.position), correlation);
+        OutputMgr.Instance.AddOrbitTrajectory(_orbitId,v, TobiiMgr.Instance.WTS(GetOrbitPosition()), correlation);
         return res;
     }
 

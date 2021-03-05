@@ -17,16 +17,5 @@ namespace DefaultNamespace
             //return the normalized trajectory
             return direction;
         }
-
-        public static Func<float, float> SMA(int p)
-        {
-            Queue<float> s = new Queue<float>(p);
-            return (x) =>
-            {
-                if (s.Count >= p) s.Dequeue();
-                s.Enqueue(x);
-                return s.Average();
-            };
-        }
     }
 }
