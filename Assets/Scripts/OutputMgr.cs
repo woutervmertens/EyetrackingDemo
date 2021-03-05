@@ -241,28 +241,28 @@ namespace DefaultNamespace
             }
         }
 
-        public void AddOrbitTrajectory(int orbitId, Vector2 trajectory, Vector2 pos, double minCorrelation)
+        public void AddOrbitData(int orbitId, Vector2 norm, Vector2 pos, double minCorrelation)
         {
             switch (outputType)
             {
                 case OutputType.TEXT:
                     if (outputList.ContainsKey(second))
                     {
-                        (outputList[second] as OutputData).AddOrbit(orbitId, trajectory,minCorrelation);
+                        (outputList[second] as OutputData).AddOrbit(orbitId, norm,minCorrelation);
                     }
                     else
                     {
-                        outputList.Add(second, new OutputData(second, orbitId, trajectory, minCorrelation));
+                        outputList.Add(second, new OutputData(second, orbitId, norm, minCorrelation));
                     }
                     break;
                 case OutputType.CSV:
                     if (outputList.ContainsKey(second))
                     {
-                        (outputList[second] as CSVData).AddOrbit(orbitId, trajectory,pos,minCorrelation);
+                        (outputList[second] as CSVData).AddOrbit(orbitId, norm,pos,minCorrelation);
                     }
                     else
                     {
-                        outputList.Add(second, new CSVData(second,currTest,orbitId, trajectory,pos, minCorrelation));
+                        outputList.Add(second, new CSVData(second,currTest,orbitId, norm,pos, minCorrelation));
                     }
                     break;
                 default:
@@ -271,28 +271,28 @@ namespace DefaultNamespace
             
         }
 
-        public void AddEyeTrajectory(Vector2 trajectory,Vector2 pos)
+        public void AddEyeData(Vector2 norm,Vector2 pos)
         {
             switch (outputType)
             {
                 case OutputType.TEXT:
                     if (outputList.ContainsKey(second))
                     {
-                        (outputList[second] as OutputData).AddEye(trajectory);
+                        (outputList[second] as OutputData).AddEye(norm);
                     }
                     else
                     {
-                        outputList.Add(second, new OutputData(second, trajectory));
+                        outputList.Add(second, new OutputData(second, norm));
                     }
                     break;
                 case OutputType.CSV:
                     if (outputList.ContainsKey(second))
                     {
-                        (outputList[second] as CSVData).SetEye(trajectory,pos);
+                        (outputList[second] as CSVData).SetEye(norm,pos);
                     }
                     else
                     {
-                        outputList.Add(second, new CSVData(second, currTest,trajectory,pos));
+                        outputList.Add(second, new CSVData(second, currTest,norm,pos));
                     }
                     break;
                 default:

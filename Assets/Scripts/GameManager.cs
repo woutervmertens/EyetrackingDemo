@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
         //Limit the amount of datapoints
         if (eyegazeData.Count > WindowSize) eyegazeData.Dequeue();
         //Output
-        OutputMgr.Instance.AddEyeTrajectory(v,TobiiMgr.Instance.WTS(vd));
+        OutputMgr.Instance.AddEyeData(v,TobiiMgr.Instance.WTS(vd));
     }
 
     private void HandleCompareResponse(CompareResponse res)

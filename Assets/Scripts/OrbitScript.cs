@@ -121,7 +121,7 @@ public class OrbitScript : MonoBehaviour
         if(res == CompareResponse.TargetSelected) OnSelected.Invoke();
         
         //Output
-        OutputMgr.Instance.AddOrbitTrajectory(_orbitId,v, TobiiMgr.Instance.WTS(GetOrbitPosition()), correlation);
+        OutputMgr.Instance.AddOrbitData(_orbitId,v, TobiiMgr.Instance.WTS(GetOrbitPosition()), correlation);
         return res;
     }
 
