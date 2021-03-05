@@ -114,11 +114,11 @@ public class OrbitScript : MonoBehaviour
         double correlation = Math.Min(correlationX, correlationY);
         if (correlation > threshold)
         {
-            res = (_isTarget) ? CompareResponse.TP : CompareResponse.FP;
+            res = (_isTarget) ? CompareResponse.TargetSelected : CompareResponse.DummySelected;
         }
         
         //If threshold is passed call the event
-        if(res == CompareResponse.TP) OnSelected.Invoke();
+        if(res == CompareResponse.TargetSelected) OnSelected.Invoke();
         
         //Output
         OutputMgr.Instance.AddOrbitTrajectory(_orbitId,v, TobiiMgr.Instance.WTS(GetOrbitPosition()), correlation);

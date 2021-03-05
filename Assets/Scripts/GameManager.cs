@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
     private CustomFixedUpdate FU_instance;
     
     private Queue<Vector2> eyegazeData = new Queue<Vector2>(); // holds the normalised trajectories of the eye
-    public DebugMode debugMode;
     private int TPcount, FPcount = 0;
 
     void Awake()
@@ -94,10 +93,10 @@ public class GameManager : MonoBehaviour
     {
         switch (res)
         {
-            case CompareResponse.TP:
+            case CompareResponse.TargetSelected:
                 TPcount++;
                 break;
-            case CompareResponse.FP:
+            case CompareResponse.DummySelected:
                 FPcount++;
                 break;
         }

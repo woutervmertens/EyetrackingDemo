@@ -8,7 +8,7 @@ namespace DefaultNamespace
     public enum CompareResponse
     {
         N = 0,
-        TP = 1,
-        FP = 2
+        TargetSelected = 1,
+        DummySelected = 2
     }
 }

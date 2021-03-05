@@ -32,6 +32,7 @@ namespace DefaultNamespace
     {
         private int _frame;
         private string _test = "";
+        private string _testResult = "";
         private string _eyeTrajectory = "";
         private string _eyePos = "";
         private SortedList<int,OrbitInfo> _orbitsInfos = new SortedList<int,OrbitInfo>();
@@ -76,17 +77,30 @@ namespace DefaultNamespace
         }
         public void AddCompareResponse(CompareResponse res)
         {
-            //something
+            switch (res)
+            {
+                case CompareResponse.N:
+                    _testResult = "None";
+                    break;
+                case CompareResponse.TargetSelected:
+                    _testResult = "Target Selected";
+                    break;
+                case CompareResponse.DummySelected:
+                    _testResult = "Wrong Orbit Selected";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(res), res, null);
+            }
         }
         /*CSV OUTPUT:
-            Frame:  |Test:  |Eye Norm:    |OrbitId:   |Norm:    |Correlation:   
+            Frame:  |Test:  |Eye Norm:    |OrbitId:   |Norm:    |Correlation:   |Result: 
          */
         public String GetOutput(string del)
         {
             string outstr = "";
             foreach (OrbitInfo info in _orbitsInfos.Values)
             {
-                outstr += $"{_frame}{del}{_test}{del}{_eyeTrajectory}{del}{_eyePos}{del}{info.orbitId}{del}{info.normalised}{del}{info.position}{del}{info.correlation}\n";
+                outstr += $"{_frame}{del}{_test}{del}{_eyeTrajectory}{del}{_eyePos}{del}{info.orbitId}{del}{info.normalised}{del}{info.position}{del}{info.correlation}{del}{_testResult}\n";
             }
             return outstr;
         }
@@ -133,7 +147,23 @@ namespace DefaultNamespace
 
         public void AddCompareResponse(CompareResponse res)
         {
-            //something
+            _type = DataType.Test;
+            String str = "";
+            switch (res)
+            {
+                case CompareResponse.N:
+                    str = "No target selected.";
+                    break;
+                case CompareResponse.TargetSelected:
+                    str = "The correct orbit was selected.";
+                    break;
+                case CompareResponse.DummySelected:
+                    str = "The wrong orbit was selected.";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(res), res, null);
+            }
+            _testString = $"Test result: {str}\n";
         }
 
         public String GetOutput()
@@ -272,7 +302,23 @@ namespace DefaultNamespace
         }
         public void AddCompareResponse(CompareResponse res)
         {
-            //something
+            switch (outputType)
+            {
+                case OutputType.TEXT:
+                    if (outputList.ContainsKey(second))
+                    {
+                        (outputList[second] as OutputData).AddCompareResponse(res);
+                    }
+                    break;
+                case OutputType.CSV:
+                    if (outputList.ContainsKey(second))
+                    {
+                        (outputList[second] as CSVData).AddCompareResponse(res);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
         private void OnDestroy()
         {
@@ -291,7 +337,7 @@ namespace DefaultNamespace
                     ext = ".txt";
                     break;
                 case OutputType.CSV:
-                    output = $"Frame{del}Test{del}Eye Norm x{del}Eye Norm y{del}Eye pos x{del}Eye pos y{del}OrbitID{del}Orbit Norm x{del}Orbit Norm y{del}Orbit pos x{del}Orbit pos y{del}Correlation\n";
+                    output = $"Frame{del}Test{del}Eye Norm x{del}Eye Norm y{del}Eye pos x{del}Eye pos y{del}OrbitID{del}Orbit Norm x{del}Orbit Norm y{del}Orbit pos x{del}Orbit pos y{del}Correlation{del}Test Result\n";
                     ext = ".csv";
                     break;
                 default:
