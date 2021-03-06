@@ -11,7 +11,7 @@ namespace DefaultNamespace
         public override void OnTriggered(int n)
         {
             i++;
-            Reset();
+            _screenController.Next();
         }
     
         public override void Reset()

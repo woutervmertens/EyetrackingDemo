@@ -15,6 +15,8 @@ public class ScreenController : MonoBehaviour
     public GameObject ata;
     public GameObject musicPlayer;
     public GameObject callMenu;
+    public MenuScreen[] Screens;
+    public int currentScreenIndex = 0;
     public Transform canvas;
     
     private ArrayList _orbits = new ArrayList();
@@ -22,8 +24,34 @@ public class ScreenController : MonoBehaviour
     private void Start()
     {
         canvas = transform.GetComponentInChildren<Canvas>().transform;
+        //test
         testScreen.SetScreenController(this);
         testScreen.Reset();
+        //start with first screen
+        if (Screens.Length > currentScreenIndex)
+        {
+            MenuScreen curr = Screens[currentScreenIndex];
+            curr.GetComponent<GameObject>().SetActive(true);
+            curr.SetScreenController(this);
+            curr.Reset();
+        }
+    }
+
+    public void Next()
+    {
+        //turn off old
+        MenuScreen curr = Screens[currentScreenIndex];
+        curr.GetComponent<GameObject>().SetActive(false);
+        ClearOrbits();
+        //start new
+        if (Screens.Length > currentScreenIndex + 1)
+        {
+            currentScreenIndex++;
+            curr = Screens[currentScreenIndex];
+            curr.GetComponent<GameObject>().SetActive(true);
+            curr.SetScreenController(this);
+            curr.Reset();
+        }
     }
 
     public void AddOrbit(Vector2 centerPoint, float diameter, Color color, float speed, int n, bool clockwise = true, bool isTarget = false)
