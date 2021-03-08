@@ -10,8 +10,6 @@ public class GameManager : MonoBehaviour
     public Boolean WatchMode = true;
     public Boolean StaticAlwaysOn = true;
     public Boolean SaveData = false;
-    public Boolean DebugEyetrack = false;
-    public Boolean UseMovingAverage = false;
     public int WindowSize = 30;
 
     public GameObject Watch;
