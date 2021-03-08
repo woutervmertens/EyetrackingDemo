@@ -49,7 +49,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
         float x = TobiiMgr.Instance.GetHMDRotation().x;
         StaticScreen.SetActive(!WatchMode && (StaticAlwaysOn || (x > 15 && x < 60)));
         FU_instance.Update();
@@ -63,7 +62,9 @@ public class GameManager : MonoBehaviour
     }
 
     
-
+    /// <summary>
+    /// If in measuring state, get all orbits and have them compare positional correlations with the gaze data queue.
+    /// </summary>
     private void CallOrbitsCompare()
     {
         if (GameStateMgr.Instance.State != GameState.Measuring) return;
@@ -76,12 +77,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// If in measuring state, add new gaze point data to the queue.
+    /// </summary>
     private void GetEyeGazeData()
     {
         if (GameStateMgr.Instance.State != GameState.Measuring) return;
-        //Add the new data (normalized)
+        //Add the new data
         Vector3 vd = TobiiMgr.Instance.GetViewData();
-        Vector2 v = TobiiMgr.Instance.GetNormalizedScreenPosition(vd);
+        Vector2 v = TobiiMgr.Instance.WTS(vd);
         eyegazeData.Enqueue(v);
         //Limit the amount of datapoints
         if (eyegazeData.Count > WindowSize) eyegazeData.Dequeue();

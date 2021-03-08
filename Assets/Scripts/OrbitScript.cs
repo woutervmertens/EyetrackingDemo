@@ -76,6 +76,10 @@ public class OrbitScript : MonoBehaviour
 
     /// <summary>
     /// Adds new position to the window, calculates the Pearson's correlation and reacts when the threshold is crossed.
+    /// Pearson Correlation:
+    ///     1: dataA = dataB: perfect correlation
+    ///     -1: dataA = reverse dataB: inverse correlation
+    ///     0: no correlation
     /// </summary>
     /// <param name="eyeReadings">The window of the eyetracking data.</param>
     /// <param name="threshold">The threshold to be crossed before a Positive is signaled.</param>
@@ -83,7 +87,7 @@ public class OrbitScript : MonoBehaviour
     public CompareResponse Compare(in Vector2[] eyeReadings, float threshold = 0.8f)
     {
         CompareResponse res = CompareResponse.N;
-        Vector2 v = TobiiMgr.Instance.GetNormalizedScreenPosition(GetOrbitPosition());
+        Vector2 v = TobiiMgr.Instance.WTS(GetOrbitPosition());
         //Don't start until window is filled
         if (_startUp++ < _windowsize)
         {
@@ -108,9 +112,9 @@ public class OrbitScript : MonoBehaviour
             orbY[i] = tempR[i].y;
         }
         //Calculate the correlations, take the minimum, see if it passes the threshold
-        double correlationX = Math.Abs(Correlation.Pearson(eyeX, orbX));
-        double correlationY = Math.Abs(Correlation.Pearson(eyeY, orbY));
-        
+        double correlationX = resolveNaN(Correlation.Pearson(eyeX, orbX));
+        double correlationY = resolveNaN(Correlation.Pearson(eyeY, orbY));
+
         double correlation = Math.Min(correlationX, correlationY);
         if (correlation > threshold)
         {
@@ -125,5 +129,14 @@ public class OrbitScript : MonoBehaviour
         return res;
     }
 
+    /// <summary>
+    /// In case <paramref name="d"/> is NaN, return -1.
+    /// </summary>
+    /// <param name="d">The double to check.</param>
+    /// <returns>The given double or -1.</returns>
+    private double resolveNaN(double d)
+    {
+        return (Double.IsNaN(d)) ? -1 : d;
+    }
     
 }
