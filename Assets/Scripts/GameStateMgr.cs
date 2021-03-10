@@ -15,4 +15,12 @@ namespace DefaultNamespace
         
         public GameState State { get; set; }
     }
+
+    /* How to reset:
+    IEnumerator endReset()
+    {
+        yield return new WaitForSeconds(0.5f);
+        GameStateMgr.Instance.State = GameState.Measuring;
+    }
+    */
 }

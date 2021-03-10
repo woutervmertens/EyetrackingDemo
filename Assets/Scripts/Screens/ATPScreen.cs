@@ -15,7 +15,6 @@ namespace DefaultNamespace
     
         public override void Reset()
         {
-            GameStateMgr.Instance.State = GameState.Resetting;
             //Remove orbits
             _screenController.ClearOrbits();
         
@@ -25,13 +24,7 @@ namespace DefaultNamespace
             //Output
             if(index == 0) OutputMgr.Instance.StartNewTest($"ATP Test");
 
-            StartCoroutine(endReset());
         }
 
-        IEnumerator endReset()
-        {
-            yield return new WaitForSeconds(0.5f);
-            GameStateMgr.Instance.State = GameState.Measuring;
-        }
     }
 }

@@ -40,8 +40,6 @@ public class GameManager : MonoBehaviour
         {
             _screenController = StaticScreen.transform.GetComponentInChildren<ScreenController>();
         }
-
-        GameStateMgr.Instance.State = GameState.Measuring;
    
     }
 
@@ -55,7 +53,6 @@ public class GameManager : MonoBehaviour
     
     void OnFixedUpdate(float dt)
     {
-        if (GameStateMgr.Instance.State != GameState.Measuring) return;
         GetEyeGazeData();
         CallOrbitsCompare();
     }
@@ -66,7 +63,6 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void CallOrbitsCompare()
     {
-        if (GameStateMgr.Instance.State != GameState.Measuring) return;
         ArrayList _orbits = _screenController.GetOrbits();
         Vector2[] tempR = eyegazeData.ToArray();
         for (var i = 0; i < _orbits.Count; i++)
@@ -81,7 +77,6 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void GetEyeGazeData()
     {
-        if (GameStateMgr.Instance.State != GameState.Measuring) return;
         //Add the new data
         Vector3 vd = TobiiMgr.Instance.GetViewData();
         Vector2 v = TobiiMgr.Instance.WTS(vd);
