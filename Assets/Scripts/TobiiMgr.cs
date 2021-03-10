@@ -49,4 +49,10 @@ public class TobiiMgr : MonoBehaviour
         if (!hmd) Start();
         return hmd.transform.eulerAngles;
     }
+
+    public Vector3 GetHMDPosition()
+    {
+        if (!hmd) Start();
+        return hmd.transform.position;
+    }
 }

@@ -190,13 +190,14 @@ namespace DefaultNamespace
     public enum OutputType
     {
         TEXT,
-        CSV
+        CSV,
+        NO_OUTPUT
     }
     
     public class OutputMgr : MonoBehaviour
     {
         private static OutputMgr instance = null;
-        public static OutputMgr Instance { get { return instance != null ? instance : (instance = new GameObject("OutputMgr").AddComponent<OutputMgr>()); } }
+        public static OutputMgr Instance { get { return (instance != null) ? instance : (instance = new GameObject("OutputMgr").AddComponent<OutputMgr>()); } }
 
         public string path = "Assets/TestData/";
         private SortedList outputList = new SortedList();
@@ -204,7 +205,7 @@ namespace DefaultNamespace
         private CustomFixedUpdate FU_instance;
         private int second = 0;
         private string currTest = "";
-        private OutputType outputType = OutputType.TEXT;
+        private OutputType outputType = OutputType.NO_OUTPUT;
         private bool _saveData;
         private string del = "\t";
         void Awake()
@@ -236,8 +237,6 @@ namespace DefaultNamespace
                     if(outputList.ContainsKey(second))(outputList[second] as CSVData).SetTest(name);
                     currTest = name;
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -265,8 +264,6 @@ namespace DefaultNamespace
                         outputList.Add(second, new CSVData(second,currTest,orbitId, norm,pos, minCorrelation));
                     }
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
             
         }
@@ -295,8 +292,6 @@ namespace DefaultNamespace
                         outputList.Add(second, new CSVData(second, currTest,norm,pos));
                     }
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
             
         }
@@ -316,8 +311,6 @@ namespace DefaultNamespace
                         (outputList[second] as CSVData).AddCompareResponse(res);
                     }
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         }
         private void OnDestroy()

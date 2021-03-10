@@ -33,7 +33,7 @@ namespace DefaultNamespace
             _screenController.AddOrbit(new Vector2(0,0),0.3f,Color.red, 120f,1 , true,true);
 
             //Set time
-            if(Times.Length >= index)
+            if(Times.Length > index)
             {
                 ClockTime c = Times[index];
                 Clock?.SetTime(c.Hours, c.Minutes);

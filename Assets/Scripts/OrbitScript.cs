@@ -116,7 +116,7 @@ public class OrbitScript : MonoBehaviour
         double correlationY = resolveNaN(Correlation.Pearson(eyeY, orbY));
 
         double correlation = Math.Min(correlationX, correlationY);
-        if (correlation > threshold)
+        if (correlation > threshold && isFacingCamera())
         {
             res = (_isTarget) ? CompareResponse.TargetSelected : CompareResponse.DummySelected;
         }
@@ -127,6 +127,11 @@ public class OrbitScript : MonoBehaviour
         //Output
         OutputMgr.Instance.AddOrbitData(_orbitId,v, TobiiMgr.Instance.WTS(GetOrbitPosition()), correlation);
         return res;
+    }
+
+    private bool isFacingCamera()
+    {
+        return Vector3.Dot(transform.forward, TobiiMgr.Instance.GetHMDPosition() - transform.position) < 0;
     }
 
     /// <summary>

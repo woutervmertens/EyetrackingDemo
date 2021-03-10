@@ -10,11 +10,6 @@ public class ScreenController : MonoBehaviour
 {
     public GameObject orbitPrefab;
     public MenuScreen testScreen;
-    public GameObject clock;
-    public GameObject atp;
-    public GameObject ata;
-    public GameObject musicPlayer;
-    public GameObject callMenu;
     public MenuScreen[] Screens;
     public int currentScreenIndex = 0;
     public Transform canvas;

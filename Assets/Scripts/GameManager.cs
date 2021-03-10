@@ -23,12 +23,13 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         FU_instance = new CustomFixedUpdate(OnFixedUpdate,30);
+        OutputMgr.Instance.SetOutputType(OutputType.CSV);
+        OutputMgr.Instance.Activate(SaveData);
     }
     // Start is called before the first frame update
     void Start()
     {
-        OutputMgr.Instance.SetOutputType(OutputType.CSV);
-        OutputMgr.Instance.Activate(SaveData);
+        
         Watch.SetActive(WatchMode);
         StaticScreen.SetActive(!WatchMode && StaticAlwaysOn);
         if (WatchMode)
