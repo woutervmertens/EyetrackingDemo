@@ -4,14 +4,23 @@ using UnityEngine.UI;
 
 namespace DefaultNamespace
 {
-    
+    [System.Serializable]
+    public struct ClockTime
+    {
+        public int Hours;
+        public int Minutes;
+    }
     public class ATAScreen : MenuScreen
     {
-        private int i = 0;
+        public ClockScript Clock;
+        
+        public ClockTime[] Times;
+
         public override void OnTriggered(int n)
         {
-            i++;
-            _screenController.Next();
+            base.OnTriggered(n);
+            //if(Times.Length > index)
+                Reset();
         }
     
         public override void Reset()
@@ -23,8 +32,15 @@ namespace DefaultNamespace
             //Create new orbits
             _screenController.AddOrbit(new Vector2(0,0),0.3f,Color.red, 120f,1 , true,true);
 
+            //Set time
+            if(Times.Length >= index)
+            {
+                ClockTime c = Times[index];
+                Clock?.SetTime(c.Hours, c.Minutes);
+            }
+
             //Output
-            if(i == 0) OutputMgr.Instance.StartNewTest($"ATA Test");
+            if(index == 0) OutputMgr.Instance.StartNewTest($"ATA Test");
 
             StartCoroutine(endReset());
         }

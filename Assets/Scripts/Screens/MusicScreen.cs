@@ -12,6 +12,7 @@ public class MusicScreen : MenuScreen
 
     public override void Reset()
     {
-        base.Reset();
+        //Output
+        if (index == 0) OutputMgr.Instance.StartNewTest($"Music screen Test");
     }
 }

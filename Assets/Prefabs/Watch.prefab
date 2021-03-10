@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1949191145684471865}
   - component: {fileID: 1949191145684471866}
-  - component: {fileID: 2428155674841459045}
   m_Layer: 0
   m_Name: Screen
   m_TagString: Untagged
@@ -51,27 +50,15 @@ MonoBehaviour:
   clock: {fileID: 8446437285363562685}
   atp: {fileID: 4853188682444142467}
   ata: {fileID: 7930982502354940984}
-  musicPlayer: {fileID: 0}
-  callMenu: {fileID: 0}
+  musicPlayer: {fileID: 4540972474156918794}
+  callMenu: {fileID: 3350856820118937236}
   Screens:
   - {fileID: 8387274862927927233}
   - {fileID: 367510246376312751}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 741468761048499709}
+  - {fileID: 1624207957386766487}
   currentScreenIndex: 0
   canvas: {fileID: 1949191146341260562}
---- !u!114 &2428155674841459045
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1949191145684471864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55938fb1577dd4ad3af7e994048c86f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1949191145863855166
 GameObject:
   m_ObjectHideFlags: 0
@@ -696,6 +683,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aba66214a16249fbb288aa5533c80f3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Clock: {fileID: 3731745532656391401}
+  Times:
+  - Hours: 6
+    Minutes: 0
 --- !u!1001 &1949191147211521510
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -937,3 +928,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 7179629654447787013}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3731745532656391401 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5794718662407100652, guid: 724476b420490844fbc0165f7edbced0,
+    type: 3}
+  m_PrefabInstance: {fileID: 7179629654447787013}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8446437285363562685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7606c9e1c97b5142898652cfacf98c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -7,11 +7,10 @@ namespace DefaultNamespace
     
     public class ATPScreen : MenuScreen
     {
-        private int i = 0;
         public override void OnTriggered(int n)
         {
-            i++;
-            _screenController.Next();
+            base.OnTriggered(n);
+            _screenController?.Next();
         }
     
         public override void Reset()
@@ -24,7 +23,7 @@ namespace DefaultNamespace
             _screenController.AddOrbit(new Vector2(0,0),0.3f,Color.red, 120f,1 , true,true);
 
             //Output
-            if(i == 0) OutputMgr.Instance.StartNewTest($"ATP Test");
+            if(index == 0) OutputMgr.Instance.StartNewTest($"ATP Test");
 
             StartCoroutine(endReset());
         }

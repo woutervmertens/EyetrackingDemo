@@ -12,6 +12,7 @@ public class MissedCallScreen : MenuScreen
 
     public override void Reset()
     {
-        base.Reset();
+        //Output
+        if (index == 0) OutputMgr.Instance.StartNewTest($"Missed Call Test");
     }
 }

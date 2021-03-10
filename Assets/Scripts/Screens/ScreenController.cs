@@ -25,13 +25,13 @@ public class ScreenController : MonoBehaviour
     {
         canvas = transform.GetComponentInChildren<Canvas>().transform;
         //test
-        testScreen.SetScreenController(this);
-        testScreen.Reset();
+        //testScreen.SetScreenController(this);
+        //testScreen.Reset();
         //start with first screen
         if (Screens.Length > currentScreenIndex)
         {
             MenuScreen curr = Screens[currentScreenIndex];
-            curr.GetComponent<GameObject>().SetActive(true);
+            curr.gameObject.SetActive(true);
             curr.SetScreenController(this);
             curr.Reset();
         }
@@ -41,14 +41,14 @@ public class ScreenController : MonoBehaviour
     {
         //turn off old
         MenuScreen curr = Screens[currentScreenIndex];
-        curr.GetComponent<GameObject>().SetActive(false);
+        curr.gameObject.SetActive(false);
         ClearOrbits();
         //start new
         if (Screens.Length > currentScreenIndex + 1)
         {
             currentScreenIndex++;
             curr = Screens[currentScreenIndex];
-            curr.GetComponent<GameObject>().SetActive(true);
+            curr.gameObject.SetActive(true);
             curr.SetScreenController(this);
             curr.Reset();
         }
@@ -61,7 +61,7 @@ public class ScreenController : MonoBehaviour
         Vector2 offsetPoint = new Vector2(centerPoint.x,centerPoint.y - diameter);
         os.Initialize(offsetPoint,color,speed, clockwise,diameter, isTarget, n);
         os.Offset(360 / n);
-        os.OnSelected.AddListener(() => { testScreen.OnTriggered(n);});
+        os.OnSelected.AddListener(() => { Screens[currentScreenIndex].OnTriggered(n);});
         _orbits.Add(os);
     }
 
