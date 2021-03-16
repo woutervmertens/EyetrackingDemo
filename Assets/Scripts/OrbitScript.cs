@@ -27,10 +27,12 @@ public class OrbitScript : MonoBehaviour
     private Queue<Vector2> _readings = new Queue<Vector2>();
 
     private Boolean _isTarget = false;
+    private Boolean _isTriggered = false;
 
     private int _windowsize = 30;
     private int _startUp = 0;
     private int _orbitId = -1;
+    
 
     private double[] eyeX, eyeY, orbX, orbY;
     // Start is called before the first frame update
@@ -87,6 +89,7 @@ public class OrbitScript : MonoBehaviour
     public CompareResponse Compare(in Vector2[] eyeReadings, float threshold = 0.8f)
     {
         CompareResponse res = CompareResponse.N;
+        if (_isTriggered) return res;
         Vector2 v = TobiiMgr.Instance.WTS(GetOrbitPosition());
         //Don't start until window is filled
         if (_startUp++ < _windowsize)
@@ -122,7 +125,11 @@ public class OrbitScript : MonoBehaviour
         }
         
         //If threshold is passed call the event
-        if(res == CompareResponse.TargetSelected) OnSelected.Invoke();
+        if (res == CompareResponse.TargetSelected)
+        {
+            OnSelected.Invoke();
+            _isTriggered = true;
+        }
         
         //Output
         OutputMgr.Instance.AddOrbitData(_orbitId,v, TobiiMgr.Instance.WTS(GetOrbitPosition()), correlation);
