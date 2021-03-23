@@ -132,7 +132,7 @@ public class OrbitScript : MonoBehaviour
         }
         
         //Output
-        OutputMgr.Instance.AddOrbitData(_orbitId,v, TobiiMgr.Instance.WTS(GetOrbitPosition()), correlation);
+        OutputMgr.Instance.AddOrbitData(_orbitId,v, correlation);
         return res;
     }
 

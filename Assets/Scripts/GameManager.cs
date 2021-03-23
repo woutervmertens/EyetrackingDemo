@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DefaultNamespace;
 using JetBrains.Annotations;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class GameManager : MonoBehaviour
     public Boolean StaticAlwaysOn = true;
     public Boolean SaveData = false;
     public int WindowSize = 30;
+    public String SubjectID = (Random.value * 100000).ToString();
 
     public GameObject Watch;
     public GameObject StaticScreen;
@@ -23,7 +25,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         FU_instance = new CustomFixedUpdate(OnFixedUpdate,30);
-        OutputMgr.Instance.SetOutputType(OutputType.CSV);
+        OutputMgr.Instance.SetSubjectID(SubjectID);
         OutputMgr.Instance.Activate(SaveData);
     }
     // Start is called before the first frame update
@@ -84,7 +86,7 @@ public class GameManager : MonoBehaviour
         //Limit the amount of datapoints
         if (eyegazeData.Count > WindowSize) eyegazeData.Dequeue();
         //Output
-        OutputMgr.Instance.AddEyeData(v,TobiiMgr.Instance.WTS(vd));
+        OutputMgr.Instance.AddEyeData(v);
     }
 
     private void HandleCompareResponse(CompareResponse res)
