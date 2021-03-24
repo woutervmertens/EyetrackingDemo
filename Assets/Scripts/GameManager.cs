@@ -14,7 +14,9 @@ public class GameManager : MonoBehaviour
     public int WindowSize = 30;
     public String SubjectID = (Random.value * 100000).ToString();
 
-    public GameObject Watch;
+    private GameObject Watch;
+    public GameObject LeftWatch;
+    public GameObject RightWatch;
     public GameObject StaticScreen;
     private ScreenController _screenController;
     private CustomFixedUpdate FU_instance;
@@ -31,18 +33,18 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-        Watch.SetActive(WatchMode);
+        Watch = GetActiveWatch();
         StaticScreen.SetActive(!WatchMode && StaticAlwaysOn);
-        if (WatchMode)
-        {
-            _screenController = Watch.transform.GetComponentInChildren<ScreenController>();
-        }
-        else
-        {
-            _screenController = StaticScreen.transform.GetComponentInChildren<ScreenController>();
-        }
-   
+        _screenController = WatchMode ? Watch.transform.GetComponentInChildren<ScreenController>() : StaticScreen.transform.GetComponentInChildren<ScreenController>();
+    }
+
+    private GameObject GetActiveWatch()
+    {
+        Boolean isLeftWatch = LeftWatch.activeInHierarchy;
+        GameObject ret = isLeftWatch  ? LeftWatch : RightWatch;
+        LeftWatch.SetActive(isLeftWatch && WatchMode);
+        RightWatch.SetActive(!isLeftWatch && WatchMode);
+        return ret;
     }
 
     // Update is called once per frame
