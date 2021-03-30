@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DefaultNamespace;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
     private CustomFixedUpdate FU_instance;
     
     private Queue<Vector2> eyegazeData = new Queue<Vector2>(); // holds the normalised trajectories of the eye
+    private Tuple<double,OrbitScript> _maxTriggeredOrbit; 
     private int TPcount, FPcount = 0;
 
     void Awake()
@@ -57,11 +59,20 @@ public class GameManager : MonoBehaviour
     
     void OnFixedUpdate(float dt)
     {
+        _maxTriggeredOrbit = new Tuple<double, OrbitScript>(-1,null);
         GetEyeGazeData();
         CallOrbitsCompare();
+        CallOrbitsTrigger();
     }
 
-    
+    private void CallOrbitsTrigger()
+    {
+        if (_maxTriggeredOrbit.Item1 < 0) return;
+        _maxTriggeredOrbit.Item2.Trigger();
+        HandleCompareResponse(_maxTriggeredOrbit.Item2.isTarget ? CompareResponse.TargetSelected : CompareResponse.DummySelected);
+    }
+
+
     /// <summary>
     /// If in measuring state, get all orbits and have them compare positional correlations with the gaze data queue.
     /// </summary>
@@ -72,7 +83,7 @@ public class GameManager : MonoBehaviour
         for (var i = 0; i < _orbits.Count; i++)
         {
             var o = (OrbitScript) _orbits[i];
-            HandleCompareResponse(o.Compare(tempR));
+            o.Compare(tempR, this);
         }
     }
 
@@ -103,5 +114,13 @@ public class GameManager : MonoBehaviour
                 break;
         }
         OutputMgr.Instance.AddCompareResponse(res);
+    }
+
+    public void AddTriggeredOrbit(double correlation,OrbitScript orbitScript)
+    {
+        if (correlation > _maxTriggeredOrbit.Item1)
+       {
+           _maxTriggeredOrbit = new Tuple<double, OrbitScript>(correlation,orbitScript);
+       }
     }
 }

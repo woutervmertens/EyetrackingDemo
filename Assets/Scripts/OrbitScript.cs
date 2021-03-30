@@ -27,6 +27,8 @@ public class OrbitScript : MonoBehaviour
     private Queue<Vector2> _readings = new Queue<Vector2>();
 
     private Boolean _isTarget = false;
+    public bool isTarget => _isTarget;
+
     private Boolean _isTriggered = false;
 
     private int _windowsize = 30;
@@ -40,7 +42,6 @@ public class OrbitScript : MonoBehaviour
     {
         _orbitTransform = this.gameObject.transform.GetChild(0);
         _orbitImage = _orbitTransform.GetComponent<Image>();
-        
     }
 
     // Update is called once per frame
@@ -84,18 +85,18 @@ public class OrbitScript : MonoBehaviour
     ///     0: no correlation
     /// </summary>
     /// <param name="eyeReadings">The window of the eyetracking data.</param>
+    /// <param name="man">The GameManager pointer.</param>
     /// <param name="threshold">The threshold to be crossed before a Positive is signaled.</param>
-    /// <returns>A CompareResponse value.</returns>
-    public CompareResponse Compare(in Vector2[] eyeReadings, float threshold = 0.8f)
+    public void Compare(in Vector2[] eyeReadings, GameManager man, float threshold = 0.8f)
     {
-        CompareResponse res = CompareResponse.N;
-        if (_isTriggered) return res;
+        if (_isTriggered) return;
+        if (!isFacingCamera()) _startUp = 0;
         Vector2 v = TobiiMgr.Instance.WTS(GetOrbitPosition());
         //Don't start until window is filled
         if (_startUp++ < _windowsize)
         {
             _readings.Enqueue(v);
-            return res;
+            return;
         }
         //Remove oldest reading. Get normalised position and add it to the queue
         _readings.Dequeue();
@@ -121,19 +122,17 @@ public class OrbitScript : MonoBehaviour
         double correlation = Math.Min(correlationX, correlationY);
         if (correlation > threshold && isFacingCamera())
         {
-            res = (_isTarget) ? CompareResponse.TargetSelected : CompareResponse.DummySelected;
+            man.AddTriggeredOrbit(correlation,this);
         }
-        
-        //If threshold is passed call the event
-        if (res == CompareResponse.TargetSelected)
-        {
-            OnSelected.Invoke();
-            _isTriggered = true;
-        }
-        
+
         //Output
         OutputMgr.Instance.AddOrbitData(_orbitId,v, correlation);
-        return res;
+    }
+
+    public void Trigger()
+    {
+        OnSelected.Invoke();
+        _isTriggered = true;
     }
 
     private bool isFacingCamera()
