@@ -78,3 +78,7 @@ Assets/Materials/*
 Assets/Scripts/DetectPursuit.cs
 Assets/Scripts/DetectPursuit.cs.meta
 Assets/DevDen Arch Viz Scotland/*
+
+*.jar
+
+orbitsvrunity.git/
