@@ -74,6 +74,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 /Assets/TestData/*
+Assets/Materials/*
 Assets/Scripts/DetectPursuit.cs
 Assets/Scripts/DetectPursuit.cs.meta
 Assets/DevDen Arch Viz Scotland/*
